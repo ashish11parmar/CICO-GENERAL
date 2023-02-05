@@ -57,6 +57,7 @@ router.post('/register', async (req, res) => {
 router.post('/signin', async(req, res) =>{
     const {email, password}=req.body;
     
+
     if(!email, !password){
         return res.status(422).json({error:"Plzz filled property"});
     }
@@ -66,8 +67,16 @@ router.post('/signin', async(req, res) =>{
         if(login){
             
             const ismatch = await bcrypt.compare(password, login.password);
-            const token = await login.generateAuthToken();
+           
+            // generate the token 
+
+            const token  = await login.generateAuthToken();
             console.log(token);
+
+            res.cookie('jwtoken', token, {
+                expires: new Date(Date.now() + 25832000000),
+                httpOnly:true
+            });
 
         if(!ismatch){
             res.status(400).json({error:"Invalid Credential"})

@@ -27,14 +27,16 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    tokena:[
+    tokens:[
         {
         token:{
             type:String,
             required:true
+
         }
     }
     ]
+    
 })
 
 UserSchema.pre('save',async function(next){
@@ -45,17 +47,22 @@ UserSchema.pre('save',async function(next){
     next();
 })
 
-UserSchema.methods.generateAuthToken = async function(){
-     try{
+// we are generate the token 
 
-        const token = jwt.sign({_id: this._id}, process.env. SECRET_KEY)
-        this.tokena = this.tokena.concat({token:token});
+UserSchema.methods.generateAuthToken = async function(){
+
+    try{
+
+        const token = jwt.sign({_id:this._id}, process.env.SECRET_KEY)
+        const tokens  = this.tokens.concat({token:token});
         await this.save();
         return token;
+    }catch(err){
+        console.log(err);
+    }
 
-     }catch(err){
-            console.log(err);
-     }
+
+
 }
 
 
