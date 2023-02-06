@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv')
 
 const UserSchema = new mongoose.Schema({
     name:{
@@ -29,15 +30,17 @@ const UserSchema = new mongoose.Schema({
     },
     tokens:[
         {
-        token:{
-            type:String,
-            required:true
+            token:
+            {
+                type:String,
+                required:true
 
+            }
         }
-    }
+   
     ]
     
-})
+});
 
 UserSchema.pre('save',async function(next){
     if(this.isModified('password')){
@@ -54,7 +57,7 @@ UserSchema.methods.generateAuthToken = async function(){
     try{
 
         const token = jwt.sign({_id:this._id}, process.env.SECRET_KEY)
-        const tokens  = this.tokens.concat({token:token});
+        this.tokens  = this.tokens.concat({token:token});
         await this.save();
         return token;
     }catch(err){

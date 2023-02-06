@@ -14,7 +14,7 @@ app.listen(PORT, ()=>{
     console.log(`${PORT} is running`);
 
  
-app.get('/signin', (req, res)=>{
-    res.send("server side signin page")
-})
+// app.get('/signin', (req, res)=>{
+//     res.send("server side signin page")
+// })
 })
