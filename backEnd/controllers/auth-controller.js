@@ -49,7 +49,7 @@ const register = async (req, res) => {
     const { name, email, phone, work, password, cpassword } = req.body;
 
     if (!name, !email, !phone, !work, !password, !cpassword) {
-        return res.status(422).json({ error: "Plz filled property" });
+        return res.status(422).json({ error: "Plz filled property", status: 422 });
     }
 
     try {
