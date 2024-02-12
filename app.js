@@ -8,13 +8,9 @@ const User = require('./model/Userschema');
 const app = express();
 
 app.use(express.json());
-app.use(require('./router/router'));
+app.use(require('./router/auth-router'));
+app.use(require('./router/employee-route'));
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`${PORT} is running`);
-
- 
-// app.get('/signin', (req, res)=>{
-//     res.send("server side signin page")
-// })
 })
