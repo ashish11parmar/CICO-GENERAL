@@ -1,0 +1,382 @@
+.chat .chat-header .chat-with {
+    font-weight: bold;
+}
+
+.dynamic_color {
+    color: #555;
+    font-size: 12px;
+    margin-bottom: 5px;
+
+    @media(max-width: 575px) {
+        font-size: 10px;
+    }
+
+    +h3.col-blue {
+        font-size: 24px !important;
+
+        @media(max-width: 575px) {
+            font-size: 20px !important;
+        }
+    }
+}
+
+.date_change {
+    margin: 20px;
+}
+
+.user_card {
+    background: #fff !important;
+    min-height: 50px !important;
+    position: relative !important;
+    margin-bottom: 24px !important;
+    border: 1px solid #f2f4f9 !important;
+    border-radius: 10px !important;
+    box-shadow: rgb(0 0 0 / 10%) 1px 1px 10px !important;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.details {
+    display: flex;
+}
+
+.mat-icon {
+    vertical-align: middle;
+}
+
+.singleUser {
+    box-shadow: none !important;
+}
+
+.leaveReason {
+    white-space: break-spaces;
+}
+
+
+mat-panel-title {
+    color: var(--color-font-black);
+
+    .user_name_title {
+        p {
+            margin: 0px;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            span {
+                color: rgba(0, 0, 0, 0.87);
+                font-size: 12px;
+            }
+        }
+    }
+
+    @media (max-width: 575px) {
+        flex: 0 0 calc(100% - 55px);
+        max-width: calc(100% - 55px);
+        width: calc(100% - 55px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block !important;
+    }
+}
+
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+mat-expansion-panel {
+    box-shadow: rgb(0 0 0 / 20%) 1px 1px 10px !important;
+    border-radius: 10px !important;
+    margin: 0px 0px 10px !important;
+}
+
+// .example-headers-align .mat-expansion-panel-header-description {
+//     justify-content: space-between;
+//     align-items: center;
+//     color: rgba(0, 0, 0, 0.87);
+
+//     @media (max-width: 575px) {
+//         flex: 0 0 30px;
+//         max-width: 30px;
+//     }
+// }
+
+// .example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+//     margin-left: 8px;
+// }
+
+.approved_leave {
+    color: var(--theme-color-green);
+}
+
+.pending_leave {
+    color: var(--theme-color-yellow);
+}
+
+.rejected_leave {
+    color: var(--theme-color-red);
+}
+
+.approve_btn {
+    color: var(--theme-color-green);
+}
+
+.reject_btn {
+    color: var(--theme-color-red);
+}
+
+.approve {
+    color: var(--theme-color-green);
+}
+
+.pending {
+    color: var(--theme-color-cico-yellow);
+}
+
+.reject {
+    color: var(--theme-color-red);
+}
+
+.timeline-item {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    background-color: var(--theme-color-light-gray);
+}
+
+.modal_title_custom {
+    color: var(--theme-color-cico-orange);
+}
+
+.border-bottom {
+    border-bottom: 1px solid darkgray;
+}
+
+button.close {
+    border: none;
+    background: none;
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: var(--theme-color-cico-orange) !important;
+}
+
+mat-form-field::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+
+::ng-deep .avatar-content {
+    object-fit: cover;
+}
+
+// history, edit, remove button css here.
+.button-group {
+    width: 75%;
+    max-width: 350px;
+}
+
+.button-custom {
+    flex: 1;
+    height: 20px;
+    padding: 0 5px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.button-attendance {
+    color: #8F8B8B;
+    text-align: left;
+}
+
+.button-edit {
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    color: #0EA4C5;
+}
+
+.button-remove {
+    color: #FF0000;
+}
+
+.working-border {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+
+
+// working status dynamically icon css goes below.
+.status_approve {
+    background-color: green;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 45px;
+    right: -7px;
+    transform: rotate(45deg);
+    font-size: 18px;
+    padding: 6px 6px;
+    width: 30px;
+    height: 30px;
+}
+
+.status_break {
+    background-color: var(--theme-color-cico-yellow);
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 45px;
+    right: -7px;
+    font-size: 18px;
+    padding: 6px 6px;
+    width: 30px;
+    height: 30px;
+}
+
+.status_stopBreak {
+    background-color: orange;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 45px;
+    right: -7px;
+    // transform: rotate(45deg);
+    font-size: 18px;
+    padding: 6px 6px;
+    width: 30px;
+    height: 30px;
+}
+
+.status_reject {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 45px;
+    right: -7px;
+    transform: rotate(230deg);
+    font-size: 18px;
+    padding: 6px 6px;
+    width: 30px;
+    height: 30px;
+}
+
+.Onleave {
+    background-color: gray;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 45px;
+    right: -7px;
+    font-size: 18px;
+    padding: 6px 6px;
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 575px) {
+
+    mat-form-field::ng-deep .mat-form-field-infix {
+        width: 110px;
+
+    }
+
+    .working-border {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        border-right: none;
+    }
+}
+
+
+/* edit, remove and history responsive button */
+@media (max-width: 576px) {
+    .button-group {
+        padding: 0 2px;
+    }
+}
+
+@media (min-width: 768px) {
+    .button-group {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .custom-button {
+        font-size: 14px;
+    }
+}
+
+
+// @note status responsive for mobile size.
+// @media screen and (min-width: 320px) and (max-width: 480px) {
+
+//     .status_stopBreak,
+//     .status_approve,
+//     .status_break,
+//     .status_reject,
+//     .Onleave {
+//         left: 52%;
+//     }
+// }
+
+// // @note for tablets or ipad size.
+// @media screen and (min-width: 481px) and (max-width: 768px) {
+
+//     .status_stopBreak,
+//     .status_approve,
+//     .status_break,
+//     .status_reject,
+//     .Onleave {
+//         left: 52%;
+//     }
+// }
+
+// // @note for desktop size.
+// @media screen and (min-width: 769px) and (max-width: 1024px) {
+
+//     .status_stopBreak,
+//     .status_approve,
+//     .status_break,
+//     .status_reject,
+//     .Onleave {
+//         left: 10%;
+//     }
+// }
+
+
+.ngxr-loader ngx-skeleton-loader::ng-deep.loader {
+    height: 70px;
+    border-radius: 6px;
+    width: 70px;
+}
+
+.ngxr-loader ngx-skeleton-loader::ng-deep.loader:focus-visible {
+    outline: none;
+}
+
+ngx-skeleton-loader::ng-deep.loader {
+    margin-bottom: 0;
+}
+
+.button-skeleton ngx-skeleton-loader::ng-deep.loader {
+    margin-bottom: 0;
+    width: 50%;
+}
+
+.button-skeleton {
+    text-align: center;
+}
+
+.timeline-skeleton ngx-skeleton-loader::ng-deep.loader {
+    height: 135px;
+    width: 205px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-radius: 16px !important;
+}

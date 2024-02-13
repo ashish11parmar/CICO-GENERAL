@@ -1,0 +1,27 @@
+image: node:14
+
+pipelines:
+  branches:
+    rtdb-firebase-for-daily-logs:
+       - step:
+          name: Installation
+          caches:
+            - node
+          script:
+            - rm -rf package-lock.json
+            - npm install
+            - npm run build --prod
+            - apt-get update && apt-get install zip
+            - zip -r client.zip dist/rao-attendance
+          artifacts:
+            - client.zip
+       - step:
+          name: Deployment
+          script:
+            - pipe: atlassian/scp-deploy:1.2.1
+              variables:
+                USER: $STAGING_USER
+                SERVER: $STAGING_HOST
+                REMOTE_PATH: '/var/www/html/rao-attendance-admin-staging'
+                LOCAL_PATH: 'client.zip'
+            - ssh $STAGING_USER@$STAGING_HOST unzip -o /var/www/html/rao-attendance-admin-staging/client -d /var/www/html/rao-attendance-admin-staging

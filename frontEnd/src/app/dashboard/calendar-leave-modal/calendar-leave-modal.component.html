@@ -1,0 +1,112 @@
+<div class="px-sm-5" *ngIf="leaveDetail">
+  <form [formGroup]="leaveDetailForm">
+    <div>
+      <div class="row">
+        <div class="col-md-12 mb-2 px-md-2">
+          <mat-form-field matRippleColor="red" class="w-100">
+            <mat-label>Employee</mat-label>
+            <input readonly formControlName="employeeName" matInput />
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-2 px-md-2">
+          <mat-form-field class="w-100">
+            <mat-label>Leave Type</mat-label>
+            <input readonly formControlName="leaveType" matInput />
+          </mat-form-field>
+        </div>
+
+        <div class="mb-2 px-md-2" [ngClass]="
+            leaveDetail && leaveDetail.day_status_id === '1'
+              ? 'col-md-6'
+              : 'col-md-4'
+          ">
+          <mat-form-field class="w-100">
+            <mat-label>Leave Period</mat-label>
+            <input readonly formControlName="leavePeriod" matInput />
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 mb-2 d-flex px-md-2 align-items-center" *ngIf="
+            (leaveDetail && leaveDetail.day_status_id === '2') ||
+            leaveDetail.day_status_id === '3'
+          ">
+          <mat-form-field class="w-100">
+            <mat-label>Time Period</mat-label>
+            <input readonly formControlName="halfDay" matInput />
+          </mat-form-field>
+        </div>
+        <div class="mb-2 px-md-2 text-center" [ngClass]="
+            leaveDetail && leaveDetail.day_status_id === '1'
+              ? 'col-md-6'
+              : 'col-md-4'
+          ">
+          <mat-form-field class="w-100">
+            <mat-label class="d-block">Applied On</mat-label>
+            <!-- <mat-label>{{leaveDetailForm.controls['createdAt'].value}}</mat-label> -->
+            <input readonly formControlName="createdAt" matInput />
+          </mat-form-field>
+        </div>
+        <!-- </div> -->
+
+        <div class="col-md-6 mb-2 px-md-2">
+          <mat-form-field class="w-100">
+            <input readonly formControlName="fromDate" matInput placeholder="From" />
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 px-md-2">
+          <mat-form-field class="w-100">
+            <input readonly formControlName="toDate" matInput placeholder="To" />
+          </mat-form-field>
+        </div>
+        <div class="col-12 px-md-2 d-flex justify-content-start">
+          <label>Reason :</label>
+        </div>
+        <div class="col-12 px-md-2 mb-2">
+          <!-- <mat-form-field class="w-100"> -->
+          <textarea readonly formControlName="reason" style="min-height: 150px" matInput></textarea>
+          <!-- </mat-form-field> -->
+        </div>
+
+        <div *ngIf="leaveDetailForm.value['adminComment']" class="col-12 px-md-2 d-flex justify-content-start">
+          <label>Admin remark :</label>
+        </div>
+        <div *ngIf="leaveDetailForm.value['adminComment']" class="col-12 px-md-2 mb-4">
+          <!-- <mat-form-field class="w-100"> -->
+          <input readonly formControlName="adminComment" matInput />
+          <!-- </mat-form-field> -->
+        </div>
+
+        <div *ngIf="isAttatchment" class="col-12 px-md-2 d-flex justify-content-start">
+          <label>Attatchment :</label>
+        </div>
+        <div *ngIf="isAttatchment" class="col-12 px-md-2 py-2 mb-4">
+          <img (click)="openAttatchment()" style="width: 100px; height: 100px" [src]="getAttatchmentUrl()"
+            alt="Leave attatchment" />
+        </div>
+        <div class="col-sm-12 px-md-2">
+          <label>Status:</label>
+          <p class="approved_leave pt-1 d-flex align-items-center weight-500" *ngIf="leaveDetail.status == '1'">
+            <mat-icon style="margin-right: 5px">check_circle</mat-icon> Approved
+          </p>
+          <p class="pending_leave d-flex pt-1 align-items-center weight-500" *ngIf="leaveDetail.status == '2'">
+            <mat-icon style="margin-right: 5px">watch_later</mat-icon> Pending
+          </p>
+          <p class="rejected_leave d-flex pt-1 align-items-center weight-500" *ngIf="leaveDetail.status == '3'">
+            <mat-icon style="margin-right: 5px">cancel</mat-icon> Rejected
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer statuspending justify-content-center mb-5 mt-5"
+    *ngIf="leaveDetail && leaveDetail.status == '2'">
+    <button class="reject_btn me-2" mat-stroked-button (click)="action(3)">
+      Reject
+    </button>
+    <button class="approve_btn me-2" mat-stroked-button (click)="action(1)" *ngIf="!isLoading">
+      Approve
+    </button>
+    <button class="approve_btn me-2" mat-stroked-button (click)="action(1)" *ngIf="isLoading">
+      Working...
+    </button>
+  </div>
+</div>

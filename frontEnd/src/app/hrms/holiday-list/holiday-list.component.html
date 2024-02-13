@@ -1,0 +1,584 @@
+<mat-drawer-container hasBackdrop="false" class="h-100 mx-4">
+  <mat-drawer #drawer1 mode="over" position="end" class="side-drawer px-1">
+    <!-- SIDE PANEL CONTENT -->
+    <div class="row my-2">
+      <div class="col-12 d-flex justify-content-end">
+        <mat-icon mat-icon-button class="pointer" (click)="closeDrawer()"
+          >close</mat-icon
+        >
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 p-0">
+        <app-add-holiday
+          [holiday]="selectedHoliday"
+          (holidayChange)="getHolidaylist()"
+          (deleteHoliday)="deleteHoliday(selectedHoliday)"
+        ></app-add-holiday>
+      </div>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer-content class="mt-4">
+    <div class="row my-2">
+      <div class="col-9">
+        <h3 class="page-title float-left">Holidays</h3>
+        <div>{{ holidayList.filteredData.length }} public holidays</div>
+      </div>
+      <div
+        class="col-md-3 d-flex justify-content-end d-sm-block text-end mb-3 mb-sm-0"
+      >
+        <button [disabled]="loading" mat-raised-button class="cico-button" (click)="openDrawer()">
+          Add Holiday
+        </button>
+      </div>
+    </div>
+    <div class="row my-2">
+      <div class="col-lg-9 col-sm-12">
+        <div
+          class="row m-0"
+          id="calender-skeletone-loader-leave-list"
+          *ngIf="loading"
+        >
+          <div class="col-12 rect-card m-0 p-0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div class="calender-skel">
+              <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <ngx-skeleton-loader appearance="circle">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-card class="cico-card p-0 pt-3 p-sm-3" *ngIf="!loading">
+          <mat-card-title>
+            <h3 class="ps-2 p-sm-0 page-title" style="color: #fff !important">
+              Holiday Calendar
+            </h3>
+          </mat-card-title>
+          <mat-card-content class="m-2 radi-16">
+            <div class="row">
+              <div class="col-md-8">
+                <h4 id="holiday-card-calendar-month">
+                  {{ viewDate | calendarDate : view + "ViewTitle" : "en" }}
+                </h4>
+              </div>
+              <div class="col-md-4 mb-4 mb-sm-0 color-default">
+                <div class="btn-group d-flex justify-content-end">
+                  <div
+                    class="btn btn-primary"
+                    mwlCalendarPreviousView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="activeDayIsOpen = false"
+                    (click)="onChange(view)"
+                  >
+                    Previous
+                  </div>
+                  <div
+                    class="btn btn-outline-secondary"
+                    mwlCalendarToday
+                    [(viewDate)]="viewDate"
+                    (click)="onChange(view)"
+                  >
+                    Today
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    mwlCalendarNextView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="activeDayIsOpen = false"
+                    (click)="onChange(view)"
+                  >
+                    Next
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="holiday-card-calendar" class="color-default">
+              <mwl-calendar-month-view
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                [activeDayIsOpen]="activeDayIsOpen"
+                (dayClicked)="dayClicked($event.day)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-month-view>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-lg-3 col-sm-12 h-700 mt-4 mt-lg-0">
+        <div
+          class="row"
+          id="skeletone-loader-leave-list-side-calender"
+          *ngIf="loading"
+        >
+          <div class="col-12 border-top pt-3">
+            <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+            <div class="row">
+              <div class="col-6">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+              </div>
+              <div class="rect-card">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 border-top pt-3">
+            <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+            <div class="row">
+              <div class="col-6">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+              </div>
+              <div class="rect-card">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 border-top pt-3">
+            <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+            <div class="row">
+              <div class="col-6">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+                <!-- <ngx-skeleton-loader> </ngx-skeleton-loader> -->
+              </div>
+              <div class="rect-card">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!loading">
+          <div
+            class="row"
+            role="list"
+            *ngFor="let item of holidayList.filteredData"
+          >
+            <div class="col-12" role="listitem">
+              <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                  <div>
+                    <h4
+                      class="mb-0 weight-500 holiday-title"
+                      (click)="openDrawer(item)"
+                    >
+                      {{ item.name | titlecase }}
+                    </h4>
+                    <p>
+                      {{ item.start_date | date : "dd-MM-YYYY" }}
+                      <span *ngIf="item.start_date !== item.end_date"
+                        >to {{ item.end_date | date : "dd-MM-YYYY" }}</span
+                      >
+                    </p>
+                    <p>{{ item.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <mat-divider class="my-1"></mat-divider>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,25 @@
+<div>
+    <h1 mat-dialog-title class="mat-dialog-title modal_title_custom light-underline text-red text-capitalize">
+        <mat-icon class="mr-1">delete</mat-icon>
+        <span>
+            Remove
+        </span>
+    </h1>
+    <mat-dialog-content>
+        <div class="content">
+            <h5>Are you sure you want to remove this holiday?</h5>
+        </div>
+    </mat-dialog-content>
+</div>
+<mat-dialog-actions class="job-action">
+    <div class="buttons">
+        <button mat-raised-button (click)="confirmjob('yes')" color="warn" class="yes-btn button_hover_effect">
+            <mat-icon class="mr-1">check_circle</mat-icon>
+            Yes
+        </button>
+        <button mat-raised-button (click)="confirmjob('no')" color="primary" class="delete-btn close_hover_effect">
+            <mat-icon class="mr-1">cancel</mat-icon>
+            No
+        </button>
+    </div>
+</mat-dialog-actions>

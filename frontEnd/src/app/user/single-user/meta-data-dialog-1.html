@@ -1,0 +1,35 @@
+<div>
+  <h1 mat-dialog-title class="mat-dialog-title modal_title_custom light-underline">
+    <mat-icon [hidden]="dailogData.type != 'location'" class="mr-1">place</mat-icon>
+    <mat-icon [hidden]="dailogData.type != 'image'" class="mr-1">image</mat-icon>
+    <mat-icon [hidden]="dailogData.type != 'salary'" class="mr-1">money</mat-icon>
+    <span> {{dailogData.type}} </span>
+  </h1>
+  <mat-dialog-content [hidden]="dailogData.type != 'location'">
+    <div id="map" style="height: 300px;"></div>
+  </mat-dialog-content>
+  <mat-dialog-content [hidden]="dailogData.type != 'image'">
+    <div style="width: 100%; padding-top: 100%; position: relative">
+      <img style="
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          margin: auto;
+          object-fit: cover;
+        " [src]="dailogData.data" onerror="this.src='assets/images/noData.jpg'" alt="selfie" />
+    </div>
+  </mat-dialog-content>
+</div>
+<mat-dialog-actions class="job-action">
+  <div class="buttons" style="display: flex; justify-content: center; width: 100%">
+    <button mat-raised-button mat-button class="cico-button" (click)="onNoClick()">
+      Close
+    </button>
+  </div>
+</mat-dialog-actions>

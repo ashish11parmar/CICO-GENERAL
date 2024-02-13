@@ -1,0 +1,61 @@
+.user_detail {
+    position: relative;
+    z-index: 1;
+
+    &:before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: rgb(var(--theme-color-cico-orange-rgb), 10%) !important;
+    }
+
+    padding: 0px 15px;
+
+    .row {
+        min-height: calc(100vh - 100px);
+
+        @media(max-width: 767px) {
+            min-height: calc(100vh - 30px);
+        }
+    }
+
+    .image {
+        img {
+            width: 100%;
+            padding: 20px;
+
+            @media(max-width: 1199px) {
+                padding: 0px;
+            }
+        }
+    }
+
+    mat-card {
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+
+        .logo_img img {
+            max-width: 80%;
+            width: 180px;
+            margin-bottom: 20px;
+        }
+
+        h5 {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+// Signup Css start here 
+
+.signup{
+    color: #FF8400;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+}

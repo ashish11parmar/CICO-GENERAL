@@ -20,7 +20,7 @@ const login = async (req, res) => {
             // generate the token 
             const token = jwt.sign({ _id: login._id }, process.env.SECRET_KEY)
             res.cookie('jwtoken', token, {
-                expires: new Date(Date.now() + 691200000), // 8 dyas for token expire
+                expires: new Date(Date.now() + 28800000), // 8 hours for token expire
                 httpOnly: true
             });
 

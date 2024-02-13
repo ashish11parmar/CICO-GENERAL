@@ -1,0 +1,171 @@
+.user-profile-tabs {
+    ::ng-deep .mat-tab-label {
+        width: calc(100%/5);
+    }
+
+    ::ng-deep .mat-ink-bar {
+        background-color: #FF8400 !important;
+        height: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .user-profile-card {
+        min-width: 65%;
+        max-width: 1200px;
+        padding: 3rem !important;
+
+        h2 {
+            font-size: 24px;
+            margin: 0;
+            color: #000;
+        }
+
+        mat-form-field {
+            width: 70%;
+            // ::ng-deep .mat-form-field-wrapper{
+            //     padding-bottom: 0;
+            // }
+        }
+
+    }
+}
+
+.btn-2 {
+    border: none;
+}
+
+.btn-2:focus {
+    border: none;
+    outline: none;
+}
+
+button.user-profile-btn {
+    width: 160px;
+    border-radius: 12px;
+    font-weight: 500;
+    margin: 10px;
+    // margin-left: 10px;
+
+}
+
+button.user-profile-btn-add {
+    width: 160px;
+    border-radius: 4px;
+    font-weight: 500;
+
+}
+
+button.save-btn {
+    background-color: #FF8400;
+    color: #fff;
+}
+
+button.add-btn {
+    background-color: #FF8400;
+    color: #fff;
+}
+
+button.cancel-btn {
+    background-color: #000;
+    color: #fff;
+}
+
+.workexperience-modal {
+    max-width: 600px;
+    min-width: 100%;
+
+    h2 {
+        font-size: 24px;
+        margin: 0;
+        color: #000;
+    }
+
+    p {
+        font-size: 18px;
+        margin: 0;
+        color: #000;
+    }
+
+    .user-profile-tabs {
+        mat-form-field {
+            width: 90%;
+        }
+    }
+}
+
+// @note this is theme color for the table header for work experience
+.table_theme_color {
+    background-color: rgb(var(--theme-color-cico-orange-rgb), 5%) !important;
+    ;
+    color: var(--theme-color-cico-orange) !important;
+}
+
+.tabel-responsive {
+    width: 100%;
+    overflow: scroll;
+
+    table {
+        width: 100%;
+    }
+
+    tbody,
+    td,
+    tfoot,
+    th,
+    thead,
+    tr {
+        white-space: nowrap;
+        padding: 10px !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .workexperience-modal {
+
+        h2 {
+            font-size: 18px;
+            margin: 0;
+            color: #000;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0;
+            color: #000;
+        }
+
+        mat-form-field {
+            width: 100%;
+        }
+
+    }
+
+    .user-profile-tabs {
+        .user-profile-card {
+            // background-color: #F8F8F8;
+            // box-shadow: none!important;
+            min-width: 65%;
+            max-width: 1200px;
+            padding: 10px 12px !important;
+
+            h2 {
+                font-size: 18px !important;
+                margin: 0;
+                color: #000;
+            }
+
+            mat-form-field {
+                width: 100% !important;
+
+            }
+
+        }
+    }
+
+    button.user-profile-btn-add {
+        width: 100%;
+
+
+    }
+}

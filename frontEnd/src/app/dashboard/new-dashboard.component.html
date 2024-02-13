@@ -1,0 +1,444 @@
+<mat-drawer-container hasBackdrop="false" class="h-100 mx-4">
+    <!-- Dashboard start -->
+    <mat-drawer #dashboardDrawer mode="over" position="end" class="history-side-drawer px-sm-4 w-100">
+        <!-- SIDE PANEL CONTENT -->
+        <div class="row my-2">
+            <div class="col-12 d-flex justify-content-end">
+                <mat-icon mat-icon-button class="pointer" (click)="closeDrawer()">close</mat-icon>
+            </div>
+        </div>
+        <div *ngIf="isPresentFilter" class="row">
+            <div class="col-12 p-0">
+                <app-dashboard-history [presentFilter]="isPresentFilter"></app-dashboard-history>
+            </div>
+        </div>
+        <div *ngIf="isLateFilter" class="row">
+            <div class="col-12 p-0">
+                <app-dashboard-history [lateFilter]="isLateFilter"></app-dashboard-history>
+            </div>
+        </div>
+    </mat-drawer>
+    <!-- Dashboard end -->
+
+    <!-- Leave detail drawer start -->
+    <mat-drawer #leaveDetailDrawer mode="over" class="side-drawer px-1">
+        <div class="row my-4 px-sm-3">
+            <div class="col-8">
+                <h1 class="mat-dialog-title modal_title_custom m-0">
+                    <span> Leave Details </span>
+                </h1>
+            </div>
+            <div class="col-4 d-flex justify-content-end align-items-start">
+                <button class="pointer close" (click)="closeDrawer()">Close</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 p-0">
+                <app-calendar-leave-modal [leaveDetail]="leaveDetails">
+                </app-calendar-leave-modal>
+            </div>
+        </div>
+    </mat-drawer>
+    <!-- Leave detail drawer end -->
+
+    <mat-drawer-content class="mt-4">
+        <div class="m-sm-4">
+            <div class="row">
+                <!-- present chart section start -->
+                <div class="col-md-3 mb-4 mb-sm-0 px-2">
+                    <div class="rect-card" *ngIf="isLateCount">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card *ngIf="!isLateCount" (click)="opentDashboardHistoryDrawer('present')"
+                        class="custom-dash-card p-0" style="cursor: pointer">
+                        <mat-card-title class="p-3">Present Today</mat-card-title>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-8" *ngIf="noData">
+                                    <app-dashboard-chart [chartHeight]="150"
+                                        [chartDetails]="presentChartData"></app-dashboard-chart>
+                                    <!-- <canvas #PresentCountChart class="chart-exe"></canvas> -->
+                                </div>
+                                <div class="col-8" *ngIf="!noData">
+                                    <img src="../../../assets/images/NoDataFound.png" alt="no-data" width="90px">
+                                </div>
+                                <div class="col-4 chart-card-content">
+                                    <!-- <p class="chart-count">{{ present }}</p> -->
+                                    <p class="chart-count">{{presentCount}}</p>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <!-- present chart section end -->
+
+                <!-- late count chart section start -->
+                <div class="col-md-3 mb-4 mb-sm-0 px-2">
+                    <div class="rect-card" *ngIf="isLateCount">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card *ngIf="!isLateCount" (click)="opentDashboardHistoryDrawer('lateClockIn')"
+                        class="custom-dash-card p-0" style="cursor: pointer">
+                        <mat-card-title class="p-3"> Late Start </mat-card-title>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-8" *ngIf="noData">
+                                    <app-dashboard-chart [chartHeight]="150"
+                                        [chartDetails]="lateCountChartData"></app-dashboard-chart>
+                                    <!-- <canvas #LateCountChart class="chart-exe"></canvas> -->
+                                </div>
+                                <div class="col-8" *ngIf="!noData">
+                                    <img src="../../assets/images/NoDataFound.png" alt="no-data" width="90px">
+                                </div>
+                                <div class="col-4 chart-card-content">
+                                    <p class="chart-count">{{lateCount}}</p>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <!-- late count chart section end -->
+
+                <!-- overtime chart section start -->
+                <div class="col-md-3 mb-4 mb-sm-0 px-2">
+                    <div class="rect-card" *ngIf="!isOvertimeLogLoaded">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card class="custom-dash-card p-0" style="cursor: pointer" *ngIf="isOvertimeLogLoaded"
+                        routerLink="/attendance-regularize">
+                        <mat-card-title class="p-3" style="white-space: nowrap;
+                        overflow: hidden;"> Regularize Request
+                        </mat-card-title>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-8" *ngIf="!regularizeData">
+                                    <app-dashboard-chart [chartDetails]="regularizeChartData"
+                                        [chartHeight]="150"></app-dashboard-chart>
+                                </div>
+                                <div class="col-8" *ngIf="regularizeData">
+                                    <img src="../../assets/images/NoDataFound.png" alt="no-data" width="90px">
+                                </div>
+                                <div class="col-4 chart-card-content">
+                                    <p class="chart-count">{{regulariseList.length ? regulariseList.length : 0}}</p>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <!-- overtime chart section end -->
+
+                <div class="col-md-3 mb-4 mb-sm-0 px-2">
+                    <div class="rect-card" *ngIf="!isLeaveCount">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card class="custom-dash-card p-0" *ngIf="isLeaveCount">
+                        <mat-card-title class="p-3"> On Leave </mat-card-title>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-8" *ngIf="!leaveData">
+                                    <app-dashboard-chart [chartDetails]="leaveCountChartData"
+                                        [chartHeight]="150"></app-dashboard-chart>
+                                </div>
+                                <div class="col-8" *ngIf="leaveData">
+                                    <img src="../../assets/images/NoDataFound.png" alt="no-data" width="90px">
+                                </div>
+                                <div class="col-4 chart-card-content">
+                                    <p class="chart-count">{{ leaveCount }}</p>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="row my-4">
+                <!-- Calender section start -->
+                <div class="col-lg-9">
+                    <div class="row" id="calender-skeletone-loader" *ngIf="!isMapChartLoading">
+                        <div class="rect-card">
+                            <ngx-skeleton-loader> </ngx-skeleton-loader>
+                        </div>
+                        <div class="col-2" *ngFor="let n of numSequence(36)">
+                            <div class="calender-skel">
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        <ngx-skeleton-loader appearance="circle">
+                                        </ngx-skeleton-loader>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <mat-card *ngIf="isMapChartLoading" class="custom-dash-card-2 px-0">
+                        <mat-card-title class="mx-2">
+                            Holiday & Leaves Calendar
+                        </mat-card-title>
+                        <mat-card-content class="m-2 radi-50">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h4 id="holiday-card-calendar-month">
+                                        {{ viewDate | calendarDate : view + "ViewTitle" : "en" }}
+                                    </h4>
+                                </div>
+                                <div class="col-sm-4 mb-2 mb-sm-0 color-default">
+                                    <div class="btn-group d-flex justify-content-end">
+                                        <div class="btn btn-primary" mwlCalendarPreviousView [view]="view"
+                                            [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false"
+                                            (click)="onChange(view)">
+                                            Previous
+                                        </div>
+                                        <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate"
+                                            (click)="onChange(view)">
+                                            Today
+                                        </div>
+                                        <div class="btn btn-primary" mwlCalendarNextView [view]="view"
+                                            [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false"
+                                            (click)="onChange(view)">
+                                            Next
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="holiday-card-calendar" class="color-default">
+                                <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                                    [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                                    (eventClicked)="handleEvent('Clicked', $event.event)"
+                                    (eventTimesChanged)="eventTimesChanged($event)">
+                                </mwl-calendar-month-view>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <!-- Calender section end -->
+
+                <div class="col-lg-3">
+                    <div class="row">
+                        <!-- Gener ration section start -->
+                        <div class="side-rect-card" *ngIf="!isGenderRatio">
+                            <ngx-skeleton-loader> </ngx-skeleton-loader>
+                        </div>
+                        <div class="col-12 mb-3" *ngIf="isGenderRatio">
+                            <mat-card id="gender-chart-card" class="custom-dash-card">
+                                <mat-card-content>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div *ngIf="!genderData" class="d-flex justify-content-center">
+                                                <app-dashboard-chart class="chart-exe" [chartHeight]="150"
+                                                    [chartDetails]="genderChartData"></app-dashboard-chart>
+                                            </div>
+                                            <div class="d-flex justify-content-center" *ngIf="genderData">
+                                                <img src="../../assets/images/NoDataFound.png" alt="no-data"
+                                                    width="50%">
+                                            </div>
+                                            <!-- <canvas #GenderRatioChart class="chart-exe"></canvas> -->
+                                            <h4 class="weight-500 mb-1">Gender Ratio</h4>
+                                            <ul class="mb-0">
+                                                <li *ngFor="let gender of genderList">
+                                                    <span class="weight-500">{{ gender.gender }}</span>
+                                                    ({{ gender.count }})
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <!-- Gener ration section end -->
+
+                        <div class="side-rect-card" *ngIf="!isEmployeetype">
+                            <ngx-skeleton-loader> </ngx-skeleton-loader>
+                        </div>
+                        <div class="col-12 my-2" *ngIf="isEmployeetype">
+                            <mat-card id="emp-type-chart-card" class="custom-dash-card">
+                                <mat-card-content>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <div *ngIf="!employeeData">
+                                                <app-dashboard-chart class="chart-exe" [chartDetails]="employeChartData"
+                                                    [chartHeight]="50"></app-dashboard-chart>
+                                            </div>
+                                            <div class="d-flex justify-content-center" *ngIf="employeeData">
+                                                <img src="../../assets/images/NoDataFound.png" alt="no-data"
+                                                    width="50%">
+                                            </div>
+                                            <h4 class="weight-500 mb-1">Employment Types</h4>
+                                            <ul class="mb-0">
+                                                <li *ngFor="let type of employmentTypes | keyvalue">
+                                                    <span class="weight-500">{{ type.key }}</span> ({{ type.value }})
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+
+                        <div class="side-rect-card" *ngIf="!locationData">
+                            <ngx-skeleton-loader> </ngx-skeleton-loader>
+                        </div>
+                        <div class="col-12 mt-3" *ngIf="locationData">
+                            <mat-card id="gender-chart-card" class="custom-dash-card">
+                                <mat-card-content>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div *ngIf="!employeeLocation" class="d-flex justify-content-center">
+                                                <app-dashboard-chart class="chart-exe"
+                                                    [chartDetails]="locationChartData"
+                                                    [chartHeight]="150"></app-dashboard-chart>
+                                            </div>
+                                            <div class="d-flex justify-content-center" *ngIf="employeeLocation">
+                                                <img src="../../assets/images/NoDataFound.png" alt="no-data"
+                                                    width="50%">
+                                            </div>
+                                            <!-- <canvas #LocationRatioChart class="chart-exe"></canvas> -->
+                                            <h4 class="weight-500 mb-1">
+                                                Employee Location Distribution
+                                            </h4>
+                                            <ul class="mb-0">
+                                                <li *ngFor="let data of locationData | keyvalue">
+                                                    <span class="weight-500">{{ data.key }}</span> ({{
+                                                    data.value
+                                                    }})
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <!-- attendance average start -->
+                <div class="col-lg-6 mb-4 mb-xl-0">
+                    <div class="squar-card" *ngIf="isAttendance">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card class="custom-dash-card h-585" *ngIf="!isAttendance">
+                        <mat-card-title>
+                            <div class="row">
+                                <div class="col-2 chart-card-content d-flex align-items-start">
+                                    <p class="chart-count">0</p>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <h4 class="weight-500">28 day attendance average</h4>
+                                </div>
+                            </div>
+                        </mat-card-title>
+                        <mat-card-content>
+                            <div *ngIf="noData">
+                                <app-dashboard-chart class="h-450 d-flex align-items-end" [chartHeight]="150"
+                                    [chartDetails]="avgChartData"></app-dashboard-chart>
+                            </div>
+                            <div *ngIf="!noData" class="d-flex justify-content-center align-items-start mb-5">
+                                <img src="../../assets/images/NoDataFound.png" alt="no-data" width="50%">
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <!-- attendance average end -->
+
+
+                <div class="col-lg-6 mb-4 mb-xl-0">
+                    <div class="squar-card" *ngIf="isLateCount">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card class="custom-dash-card h-585" *ngIf="!isLateCount">
+                        <mat-card-title>
+                            <div class="row">
+                                <div class="col-10">Employees</div>
+                                <div class="col-12 chart-card-content d-flex align-items-end">
+                                    <p class="chart-count">{{totalEmployee}}</p>
+                                </div>
+                            </div>
+                        </mat-card-title>
+                        <mat-card-content class="h-450">
+                            <mat-tab-group id="employee-tab-group" mat-align-tabs="start" class="h-450 overflow-scroll">
+                                <mat-tab label="Clocked in ({{ presentCount }})">
+                                    <mat-list>
+                                        <mat-list-item *ngFor="let user of filterList('present')"
+                                            class="d-flex justify-content-left align-items-center my-3">
+                                            <ngx-avatar class="user-avatar theme_avatar mx-3" size="40"
+                                                name="{{user.display_name.split(' ')[0] +' ' +user.display_name.split(' ')[2]}}">
+                                            </ngx-avatar>
+                                            <div>
+                                                <div class="weight-500">
+                                                    {{ user.display_name | titlecase }}
+                                                </div>
+                                                <div>Clock-in {{ (user.workData.clockIn | timezoneConverter: timeZone)}}
+                                                </div>
+                                            </div>
+                                        </mat-list-item>
+                                    </mat-list>
+                                    <div *ngIf="presentCount === 0"
+                                        class="d-flex justify-content-center align-items-start">
+                                        <img src="../../assets/images/NoDataFound.png" alt="no-data" width="50%">
+                                    </div>
+                                </mat-tab>
+
+
+                                <mat-tab label="Absent ({{ absentCount }})" [hidden]="presentCount === 0">
+                                    <mat-list>
+                                        <mat-list-item *ngFor="let user of filterList('absent')"
+                                            class="d-flex justify-content-left align-items-center my-3">
+                                            <ngx-avatar class="user-avatar theme_avatar mx-3" size="40"
+                                                name="{{user.display_name.split(' ')[0] +' ' +user.display_name.split(' ')[2]}}">
+                                            </ngx-avatar>
+                                            <div>
+                                                <div class="weight-500">
+                                                    {{ user.display_name | titlecase }}
+                                                </div>
+                                                <div>No Clocked in</div>
+                                            </div>
+                                        </mat-list-item>
+                                    </mat-list>
+                                    <div class="d-flex justify-content-center" *ngIf="absentCount === 0">
+                                        <img src="../../assets/images/NoDataFound.png" alt="no-data" width="50%">
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <!-- Clockin map start -->
+            <div class="row mb-4">
+                <div class="col-12 mb-4">
+                    <div class="squar-full-card" *ngIf="!isMapChartLoading">
+                        <ngx-skeleton-loader> </ngx-skeleton-loader>
+                    </div>
+                    <mat-card *ngIf="isMapChartLoading" class="custom-dash-card">
+                        <mat-card-title>
+                            <p>Employee Locations</p>
+                        </mat-card-title>
+                        <mat-card-content class="mt-2">
+                            <div id="map" style="height: 500px;"></div>
+                            <!-- <agm-map *ngIf="mapLocationData.length" class="clock-in-map color-gray" [zoom]="8.5"
+                                [latitude]="mapLocationData[0].lat" [longitude]="mapLocationData[0].lng">
+                                <agm-marker *ngFor="let loc of mapLocationData" [latitude]="loc.lat"
+                                    [longitude]="loc.lng">
+                                    <agm-info-window>
+                                        <ngx-avatar [src]="loc.img" [name]="loc.img" size="50"
+                                            class="agm-marker-avatar employee-image"></ngx-avatar>
+                                        <p>
+                                            <strong>{{ loc.user }}</strong>
+                                        </p>
+                                        <p>
+                                            <strong>{{ loc.clock_in_time }}</strong>
+                                        </p>
+                                    </agm-info-window>
+                                </agm-marker>
+                            </agm-map> -->
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- Clockin map end -->
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

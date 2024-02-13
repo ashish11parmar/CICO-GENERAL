@@ -1,0 +1,67 @@
+.approve_btn {
+    color: var(--theme-color-cico-orange);
+    border-radius: 14px;
+    width: 135px;
+    border-color: var(--theme-color-cico-orange);
+}
+
+.reject_btn {
+    // color: var(--theme-color-red);
+    border-radius: 14px;
+    width: 135px;
+}
+
+.approved_leave {
+    color: var(--theme-color-green);
+}
+
+.pending_leave {
+    color: var(--theme-color-yellow);
+}
+
+.rejected_leave {
+    color: var(--theme-color-red);
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 24px;
+}
+
+mat-icon.example-tab-icon {
+    height: 35px;
+    width: 35px;
+    border: 1px solid var(--theme-color-cico-orange);
+    color: var(--theme-color-cico-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin: 10px 10px 10px 0px;
+    font-size: 25px;
+}
+
+.leaveReason {
+    white-space: break-spaces;
+}
+h4{
+    margin: 0px 0px 10px;
+     font-weight: 700;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple {
+    opacity: 0 !important;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: none !important;
+}
+
+@media (max-width: 575px) {
+    
+    .approve_btn,.reject_btn{
+      width: 100%;
+      margin-bottom: 16px;
+    }
+}

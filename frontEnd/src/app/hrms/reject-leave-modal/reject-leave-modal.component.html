@@ -1,0 +1,21 @@
+<div>
+    <h4>Comments: </h4>
+    <div>
+        <mat-form-field class="w-100">
+            <input matInput placeholder="Comment" [(ngModel)]="comment">
+        </mat-form-field>
+    </div>
+</div>
+<mat-dialog-actions class="job-action">
+    <div class="buttons">
+        <button mat-raised-button (click)="onSubmit()" color="primary" class="yes-btn button_hover_effect "
+            [disabled]="!comment || !comment.length">
+            <mat-icon class="mr-1">check_circle</mat-icon>
+            Submit
+        </button>
+        <button mat-raised-button (click)="onCancel()" color="warn" class="delete-btn close_hover_effect">
+            <mat-icon class="mr-1">cancel</mat-icon>
+            Cancel
+        </button>
+    </div>
+</mat-dialog-actions>

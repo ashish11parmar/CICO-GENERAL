@@ -1,0 +1,479 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// IMPORT THEME
+
+// @import url(https://fonts.googleapis.com/css?family=Roboto|Source+Sans+Pro&display=swap');
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/theming";
+@import "~leaflet/dist/leaflet.css";
+$my-theme-primary: mat-palette($mat-blue, 900);
+$my-theme-basic: mat-palette($mat-red, 900);
+$my-theme-accent: mat-palette($mat-green, 900);
+// $my-theme-warn: mat-palette($mat-deep-orange, A200);
+$my-theme-danger: mat-palette($mat-red, 300);
+// $my-theme-typography: mat-typography-config($font-family: "Source Sans Pro, times new roman",
+//     $headline: mat-typography-level(32px, 48px, 700),
+//     $body-1: mat-typography-level(16px, 24px, 500));
+// @include mat-base-typography($my-theme-typography);
+// create theme (use mat-dark-theme for themes with dark backgrounds)
+$my-theme: mat-light-theme($my-theme-primary, $my-theme-accent);
+@include angular-material-theme($my-theme);
+$bg-th: #f5f6fa;
+$color-th: #a3a6b4;
+$header-color: #43425d;
+$light: #555;
+
+:root {
+  --theme-color-primary: #FF8400;
+  --theme-color-blue: #0d47a1;
+  --theme-color-blue-rgb: 13, 71, 161;
+  --theme-color-light-gray: #f2f2f2;
+  --theme-color-green: #64c595;
+  --theme-color-red: #dc4e42;
+  --theme-color-yellow: #f3a112;
+  --color-font-black: #1d1d1f;
+  --background-color-black: #1d1d1f;
+  --theme-color-cico-orange: #FF8400;
+  --theme-color-cico-orange-rgb: 255, 132, 0;
+  --theme-color-cico-yellow: #FFCA28;
+  --theme-color-cico-yellow-rgb: 255, 202, 40;
+  --theme-color-cico-white: #FFFFFF;
+}
+
+.mat-drawer-container {
+  background-color: var(--theme-color-cico-white);
+}
+
+
+.mat-card {
+  box-shadow: rgb(0 0 0 / 20%) 1px 1px 10px !important;
+  border-radius: 16px !important;
+}
+
+.mat-dialog-title {
+  color: var(--theme-color-cico-orange);
+  padding-bottom: 8px;
+  font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif !important;
+
+  @media (max-width: 575px) {
+    font-size: 18px !important;
+  }
+}
+
+.modal_title_custom {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: stretch !important;
+  align-items: center !important;
+}
+
+.mat-dialog-actions {
+  margin-bottom: 0 !important;
+}
+
+.mat-dialog-container {
+  border-radius: 15px !important;
+}
+
+.light-underline {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--theme-color-light-gray);
+}
+
+.action-btns-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btns-column>div {
+  width: 42px;
+  text-align: center;
+}
+
+.action-btns-column div .mat-button {
+  min-width: unset !important;
+  padding: 0px 12px;
+
+  mat-icon {
+    margin: 0 !important;
+  }
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.col-green {
+  color: var(--theme-color-green) !important;
+}
+
+.col-blue {
+  color: var(--theme-color-blue) !important;
+}
+
+h3 {
+  font-size: 1.75rem !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+.page-title {
+  margin: 0px !important;
+  color: var(--color-font-black) !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+  // font-size: 1rem !important;
+
+  @media (max-width: 575px) {
+    font-size: 1.5rem !important;
+  }
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.text-red {
+  color: var(--theme-color-red) !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.mr-1 {
+  margin-right: 0.25rem !important;
+}
+
+.table-responsive {
+  overflow-x: hidden !important;
+}
+
+
+.leave_history_list {
+  .mat-expansion-panel-header {
+    padding: 0 15px !important;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 0 15px 15px !important;
+  }
+
+  .mat-expansion-panel-body mat-icon.example-tab-icon {
+    height: 35px;
+    width: 35px;
+    border: 1px solid var(--theme-color-blue);
+    color: var(--theme-color-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin: 10px 10px 10px 0px;
+    font-size: 25px;
+  }
+
+  .mat-expansion-panel-body mat-icon+h4 {
+    font-size: 14px;
+  }
+}
+
+
+ngx-avatar.approved_leave {
+  margin-left: auto;
+
+  .avatar-content {
+    background-color: var(--theme-color-green) !important;
+  }
+}
+
+ngx-avatar.pending_leave {
+  margin-left: auto;
+
+  .avatar-content {
+    background-color: var(--theme-color-yellow) !important;
+  }
+}
+
+ngx-avatar.rejected_leave {
+  margin-left: auto;
+
+  .avatar-content {
+    background-color: var(--theme-color-red) !important;
+  }
+}
+
+ngx-avatar.theme_avatar {
+  margin-right: 15px;
+
+  .avatar-content {
+    background-color: var(--theme-color-light-gray) !important;
+    color: var(--color-font-black) !important;
+  }
+}
+
+.cal-month-view .cal-day-badge {
+  display: none !important;
+}
+
+.cal-month-view .cal-cell .cal-event {
+  opacity: 0.75;
+}
+
+.cal-open-day-events {
+  background-color: var(--theme-color-light-gray) !important;
+  box-shadow: none !important;
+  max-height: 200px;
+  overflow-y: auto !important;
+}
+
+.cal-open-day-events>div {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0 !important;
+  margin: 5px !important;
+  position: relative;
+  z-index: 1;
+}
+
+.cal-open-day-events>div>span {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: auto !important;
+  width: auto !important;
+  z-index: -1;
+  border-radius: 5px !important;
+  margin: 3px !important;
+  opacity: 0.75;
+  margin: 0px !important;
+}
+
+.cal-open-day-events>div>mwl-calendar-event-title span {
+  display: block;
+  padding: 8px 20px;
+  text-decoration: none !important;
+}
+
+.mat-tab-label-content mat-icon {
+  margin-right: 5px;
+}
+
+body::-webkit-scrollbar {
+  display: none !important;
+}
+
+.body-scroll {
+  max-height: 100vh;
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.4);
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  /* background: rgba(0, 0, 0, 0.2) !important; */
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 8px;
+}
+
+.body-scroll::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+::-webkit-scrollbar {
+  height: 2px !important;
+  width: 4px !important;
+}
+
+::-webkit-scrollbar-track {
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+.cico-card {
+  // background: linear-gradient(45deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+  background: linear-gradient(45deg, #FF8400 0%, #FFCA28 100%);
+  color: white;
+  cursor: pointer;
+}
+
+.color-default {
+  color: initial;
+}
+
+::ng-deep #holiday-card-calendar {
+  .cal-month-view {
+    border-radius: 16px;
+    font-weight: 300;
+  }
+}
+
+#holiday-card-calendar-month {
+  font-weight: 500;
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.h-450 {
+  min-height: 450px;
+  max-height: 450px;
+  overflow: auto;
+}
+
+.h-500 {
+  min-height: 500px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.h-585 {
+  min-height: 585px;
+  max-height: 585px;
+  overflow: auto;
+}
+
+.h-650 {
+  min-height: 650px;
+  max-height: 650px;
+  overflow: auto;
+}
+
+.h-700 {
+  min-height: 700px;
+  max-height: 700px;
+  overflow: auto;
+}
+
+.user-avatar {
+  border-radius: 50%;
+}
+
+.radi-16 {
+  border-radius: 16px;
+}
+
+.weight-500 {
+  font-weight: 500 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-gray {
+  color: slategray;
+}
+
+.font-one {
+  font-size: 1rem !important;
+}
+
+.font-one-two-halves {
+  font-size: 1.25rem !important;
+}
+
+.font-one-half {
+  font-size: 1.5rem !important;
+}
+
+.rotate-45 {
+  transform: rotate(45deg) !important;
+}
+
+.cico-button {
+  background-color: var(--theme-color-cico-orange);
+  --background-color: var(--theme-color-cico-orange);
+  color: white;
+  --color: white;
+  font-weight: 450;
+}
+
+.color-gray {
+  color: var(--color-font-black) !important;
+}
+
+.radius-16 {
+  border-radius: 16px !important;
+}
+
+
+.agm-map-container-inner,
+.sebm-google-map-container-inner {
+  border-radius: 16px !important;
+}
+
+.side-drawer {
+  min-width: 700px;
+  max-width: 700px;
+}
+
+/** @note this is for noData image css defined here*/
+.nodata {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0px;
+}
+
+// // @note this is theme color for the table header for work experience
+// .table_theme_color{
+//   background-color: rgb(var(--theme-color-cico-orange-rgb),5%)!important;;
+//   color: var(--theme-color-cico-orange)!important;
+// }
+
+@media (max-width: 991px) {
+  .side-drawer {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .row {
+    --bs-gutter-x: none;
+  }
+
+  .mat-drawer:not(.mat-drawer-side) {
+    box-shadow: none;
+  }
+
+}
+
+@media (max-width: 991px) {
+  .side-drawer {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  #dashboard-history .row {
+    --bs-gutter-x: none;
+  }
+
+}

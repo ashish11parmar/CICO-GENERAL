@@ -1,0 +1,120 @@
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
+<div class="user_detail h-100 d-flex justify-content-center align-items-center" *ngIf="!isClicked">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-6">
+            <mat-card class="card_body" *ngIf="!isVerification">
+                <div class="logo_img">
+                    <img src="../../assets/images/new_logo.png" class="main_img" alt="logo">
+                </div>
+                <!-- <h2>Rao Attendance</h2> -->
+                <h5>Please sign-up to your account.</h5>
+                <form [formGroup]="signupUser">
+                    <div class="form">
+                        <mat-form-field>
+                            <mat-label>First Name</mat-label>
+                            <input matInput placeholder="FirstName" formControlName="firstName" />
+                            <mat-error>Please enter your first name</mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Last Name</mat-label>
+                            <input matInput placeholder="LastName" formControlName="lastName" />
+                            <mat-error>Please enter your last name</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form">
+                        <mat-form-field class="w-100">
+                            <mat-label>Company Name</mat-label>
+                            <input matInput placeholder="Company Name" formControlName="companyname" type="tel" />
+                            <mat-error>Please enter your company name</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form">
+                        <mat-form-field class="w-100">
+                            <mat-label>Phone number</mat-label>
+                            <input matInput placeholder="phone number" formControlName="phoneNumber"
+                                (keypress)="numberOnly($event)" />
+                            <mat-error>Please enter your phone number</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form">
+                        <mat-form-field class="w-100">
+                            <mat-label>Email</mat-label>
+                            <input matInput placeholder="Email" formControlName="email" />
+                            <mat-error>Please enter your email</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form">
+                        <mat-form-field class="w-100">
+                            <input class="password" [type]="password?'password':'text'" matInput
+                                formControlName="password" placeholder="Password">
+                            <mat-icon matSuffix (click)="passwordVisibility()"
+                                *ngIf="password">visibility_off</mat-icon>
+                            <mat-icon matSuffix (click)="passwordVisibility()" *ngIf="!password">visibility</mat-icon>
+                            <mat-error>Please enter your password</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form">
+                        <mat-form-field class="w-100">
+                            <input class="password" [type]="cpassword?'password':'text'" matInput
+                                formControlName="cpassword" placeholder="Confirm Password">
+                            <mat-icon matSuffix (click)="cpasswordVisibility()"
+                                *ngIf="cpassword">visibility_off</mat-icon>
+                            <mat-icon matSuffix (click)="cpasswordVisibility()" *ngIf="!cpassword">visibility</mat-icon>
+                            <mat-hint style="color: red;" *ngIf="(!signupUser.controls['password'].valid || 
+                            signupUser.controls['password'].value !== signupUser.controls['cpassword'].value) && 
+                           signupUser.controls['password']?.touched && 
+                           signupUser.controls['cpassword']?.touched">Password not matched!</mat-hint>
+                            <mat-error>Please enter your confirm password</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="text-center">
+                        <button mat-raised-button class="m-1 cico-button" [disabled]="!signupUser.valid || (!signupUser.controls['password'].valid || 
+                        signupUser.controls['password'].value !== signupUser.controls['cpassword'].value) && 
+                       signupUser.controls['password'].touched && 
+                       signupUser.controls['cpassword'].touched" type="submit" (click)="submit()">
+                            <mat-icon class="mr-1">login</mat-icon> <span>{{btnText}}</span>
+                        </button>
+                        <!-- <button mat-raised-button *ngIf="loading && !noMatch" class="m-1 cico-button" type="submit">
+                        <mat-icon class="mr-1">login</mat-icon> Signing...
+                    </button> -->
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div>Already have an account? <a class="signin" routerLink="/login">Sign In</a></div>
+                    </div>
+                </form>
+            </mat-card>
+
+            <div class="verification-block justify-content-center align-items-center" *ngIf="isVerification && !loading">
+                <div class="user_detail h-100 d-flex align-items-center justify-content-center">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <section>
+                            <h1 class="heading">Enter 4-Digit Verification Code</h1>
+                            <img src="../../assets/images/otp.svg" alt="" srcset="">
+                            <div class="title">Verification Code</div>
+                            <p style="margin-left: 20px;">We have sent a verification code on your registered email</p>
+                            <form [formGroup]="otpVerification">
+                                <div (paste)="handlePaste($event)">
+                                    <input formControlName="code1" #code1 type='text' class="code" maxLength="1"
+                                        (input)="handleInput($event, '', code1, code2)"
+                                        onkeydown="return event.keyCode !== 69" required />
+                                    <input formControlName="code2" #code2 type='text' class="code" maxLength="1"
+                                        (input)="handleInput($event, code1, code2, code3)"
+                                        onkeydown="return event.keyCode !== 69" required />
+                                    <input formControlName="code3" #code3 type='text' class="code" maxLength="1"
+                                        (input)="handleInput($event, code2, code3, code4)"
+                                        onkeydown="return event.keyCode !== 69" required />
+                                    <input formControlName="code4" #code4 type='text' class="code" maxLength="1"
+                                        (input)="handleInput($event, code3, code4, '')"
+                                        onkeydown="return event.keyCode !== 69" required />
+                                </div>
+                                <button class="code-verify"
+                                    (click)="verifyCode()" >Verify Code</button>
+                                <p class="resend-code" (click)="sendCode()">Resend Code</p>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

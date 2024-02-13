@@ -1,0 +1,388 @@
+<!-- <app-loader *ngIf="loading"></app-loader> -->
+
+<mat-drawer-container hasBackdrop="false" class="h-100 mx-md-4 mx-1">
+  <!-- Leave detail drawer start -->
+  <mat-drawer #leaveDetailDrawer mode="over" position="end" class="side-drawer px-1">
+    <div class="row my-4 mx-lg-4">
+      <div class="col-12">
+        <h1 class="mat-dialog-title modal_title_custom m-0">
+          <span> Leave Details </span>
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 p-0">
+        <app-calendar-leave-modal [leaveDetail]="leaveDetails"
+          (handleRejection)="handleLeave($event)"></app-calendar-leave-modal>
+      </div>
+    </div>
+  </mat-drawer>
+  <!-- Leave detail drawer end -->
+
+  <mat-drawer-content class="mt-4">
+    <div class="skeletone" *ngIf="loading">
+      <div class="row mx-lg-4">
+        <div class="col-md-2">
+          <div class="ngxr-loader d-flex justify-content-center">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </div>
+        </div>
+        <div class="col-7 my-2 my-sm-0" style="word-wrap: break-word">
+          <p class="my-0 text-gray">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+          <h4 class="mb-0 weight-500 emp-name">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </h4>
+          <p class="my-0"><ngx-skeleton-loader> </ngx-skeleton-loader></p>
+
+          <p class="my-0"><ngx-skeleton-loader> </ngx-skeleton-loader></p>
+        </div>
+        <div class="col-5 col-md-3 col-lg-3 pt-3 pt-sm-0">
+          <p class="button-skeleton m-0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+
+          <p class="button-skeleton m-0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+          <p class="button-skeleton m-0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+      </div>
+      <div class="row mx-lg-4">
+        <div class="col-6 py-1">
+          <p class="button-skeleton" style="text-align: left">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-6 py-1">
+          <p class="button-skeleton" style="text-align: right">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+      </div>
+      <div class="row my-3 mx-lg-4">
+        <div class="col-12">
+          <div class="row border-bottom pb-3">
+            <div class="col-5 px-2">
+              <p class="button-skeleton" style="text-align: right; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+              <p class="button-skeleton" style="text-align: right; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+            </div>
+            <div class="col-2 px-2 border-end border-start">
+              <p class="break-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+              <p class="break-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+            </div>
+            <div class="col-5 px-2">
+              <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+              <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+            </div>
+          </div>
+          <div class="row pt-3">
+            <div class="col-6 px-2 border-end">
+              <p class="button-skeleton" style="text-align: right; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+              <p class="button-skeleton" style="text-align: right; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+            </div>
+            <div class="col-6 px-2">
+              <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+              <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mx-lg-4">
+        <div class="col-12">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+      </div>
+      <div class="row mx-lg-4">
+        <div class="col-12 px-lg-5">
+          <p class="timeline-skeleton">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-12 px-lg-5">
+          <p class="timeline-skeleton">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-12 px-lg-5">
+          <p class="timeline-skeleton">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-12 px-lg-5">
+          <p class="timeline-skeleton">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+      </div>
+      <div class="row mx-lg-4">
+        <div class="col-12">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-6">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-6">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-6">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+        <div class="col-6">
+          <p class="button-skeleton" style="text-align: left; margin-bottom: 0">
+            <ngx-skeleton-loader> </ngx-skeleton-loader>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!loading">
+      <div class="row mx-lg-4">
+        <div class="col-md-2 col-lg-2 d-flex justify-content-center">
+          <div style="position: relative">
+            <ngx-avatar cornerRadius="10" class="theme_avatar" size="70" [round]="false"
+              name="{{ userDetails.name }}"></ngx-avatar>
+            <mat-icon *ngIf="currentStatus" [ngClass]="{ 
+              status_approve: currentStatus.attendance_type === 'clock_in',
+              status_break: currentStatus.attendance_type === 'start_break', 
+              status_stopBreak: currentStatus.attendance_type === 'stop_break', 
+              status_reject: currentStatus.attendance_type === 'clock_out',
+              Onleave: currentStatus === 'leave'
+              }">
+              {{currentStatus.attendance_type === 'clock_in' ? 'arrow_forward' :
+              currentStatus.attendance_type ==='start_break' ? 'fastfood':
+              currentStatus.attendance_type === 'stop_break' ? 'history' :
+              currentStatus.attendance_type === 'clock_out' ? 'arrow_downward':
+              currentStatus === 'leave' ? 'work_off':'work_off' }}
+            </mat-icon>
+          </div>
+        </div>
+        <div class="col-md-7 col-12 col-lg-7 my-2 my-sm-0" style="word-wrap: break-word">
+          <p class="my-0 text-gray">{{ role }}</p>
+          <h4 class="mb-0 weight-500 emp-name">
+            {{ userDetails.name | titlecase }}
+          </h4>
+          <!-- <p class="my-0">{{ userDetails.department }}</p> -->
+          <p class="my-0">{{ userDetails.email }}</p>
+
+          <!-- <p class="my-0">{{userDetails.user_email}}</p> -->
+          <!-- <p class="my-0 text-gray">{{userDetails.type | titlecase}}</p> -->
+          <p class="my-0">{{ userDetails.job_id }}</p>
+
+          <!-- <p class="my-0" *ngIf="userDetails.reporting_manager">{{userDetails.reporting_manager}}</p> -->
+          <p class="my-0" *ngIf="userDetails.reportingManager">Reports to : {{userDetails.reportingManager}}</p>
+          <div class="col-12 col-md-3 col-lg-3 d-flex justify-content-sm-end align-items-center gap-2 button-group">
+            <button class="mb-2 p-0 text-gray button-custom button-attendance" p (click)="showHistory()">
+              Attendance
+            </button>
+            <button class="mb-2 text-primary p-0 button-custom button-edit" (click)="onEdit()">
+              Edit
+            </button>
+            <button class="mb-2 text-danger p-0 button-custom button-remove" (click)="onDelete()">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mx-lg-4">
+        <div class="col-6 d-flex justify-content-start align-items-center">
+          <button *ngIf="!isSalaryProcessing" mat-stroked-button (click)="downloadSalary()" [disabled]="!salaryMonth"
+            class="" style="height: 100%; border: none; outline: none; font-weight: 500">
+            Process Salary
+          </button>
+          <button *ngIf="isSalaryProcessing" mat-stroked-button>
+            <mat-icon>
+              <mat-spinner color="accent" diameter="20"></mat-spinner>
+            </mat-icon>
+            Processing...
+          </button>
+        </div>
+
+        <div class="col-6 d-flex justify-content-end align-items-start py-1" style="text-align: center">
+          <mat-form-field class="date_packer" appearance="outline">
+            <mat-label>Select Month</mat-label>
+            <mat-select [(value)]="salaryMonth" (selectionChange)="onSelectChange()">
+              <mat-option value="previous">Previous</mat-option>
+              <mat-option value="current">Current</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div> -->
+
+      <div class="row my-3 mx-0">
+        <div class="col-12 ">
+          <div class="row text-center  my-sm-3">
+            <div class="col-md-3 working-border py-2 py-sm-0">
+              <p class="mb-1 font-one">Working Hours</p>
+              <p class="my-0 weight-500 font-one-two-halves">
+                {{ workingHour ? workingHour : 0 }} Hours
+              </p>
+            </div>
+            <!-- <mat-divider [vertical]="true"></mat-divider> -->
+            <div class="col-md-3 working-border py-2 py-sm-0">
+              <p class="mb-1 font-one">Break Duration</p>
+              <p class="my-0 weight-500 font-one-two-halves">
+                {{ breakHour ? breakHour : 0 }} Hour
+              </p>
+            </div>
+            <!-- <mat-divider [vertical]="true"></mat-divider> -->
+            <div class="col-md-3 working-border py-2 py-sm-0">
+              <p class="mb-1 font-one">Time Left</p>
+              <p class="my-0 weight-500 font-one-two-halves">
+                {{
+                totalHour - workingHour > 0
+                ? (totalHour - workingHour).toFixed(1)
+                : 0
+                }}
+                Hours
+              </p>
+            </div>
+            <!-- <mat-divider [vertical]="true"></mat-divider> -->
+            <div class="col-md-3 py-2 py-sm-0">
+              <p class="mb-1 font-one">Regularize Request</p>
+              <p class="my-0 weight-500 font-one-two-halves">
+                {{ userDetails && userDetails.regulariseCount && userDetails.regulariseCount > 0 ?
+                userDetails.regulariseCount : '0' }}
+              </p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="col-12 text-center d-flex justify-content-center my-3">
+            <div class="px-5">
+              <p class="mb-1 weight-500 font-one-two-halves">
+                {{ casualBalance + emergencyBalance - (casualSpent + emergencySpent) ? casualBalance : 0 }}/{{
+                casualBalance + emergencyBalance ? casualBalance : 0 }}
+              </p>
+              <p class="my-0 font-one">Leave balance</p>
+            </div>
+            <mat-divider [vertical]="true"></mat-divider>
+            <div class="px-5">
+              <p class="mb-1 weight-500 font-one-two-halves">{{ sickSpent ? sickSpent : 0 }}</p>
+              <p class="my-0 font-one">Sick leaves applied</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-3 mx-lg-4">
+        <div class="col-12">
+          <h4 class="mb-0 weight-500 emp-name">
+            Today's Timeline ({{ todayDate | date : "dd-MM-yyyy" }})
+          </h4>
+          <div class="ml-2 timeline-tag">
+            <ngx-mat-timeline position="start" orientation="vertical" class="py-3">
+              <ngx-mat-timeline-item *ngFor="let item of displayLogs" [icon]="item.attendance_type">
+                <ng-template ngxMatTimelineItemIcon [ngSwitch]="item.attendance_type">
+                  <mat-icon *ngSwitchCase="'clock_in'" class="rotate-45 approve">arrow_forward</mat-icon>
+                  <mat-icon *ngSwitchCase="'start_break'" class="pending">fastfood</mat-icon>
+                  <mat-icon *ngSwitchCase="'stop_break'" class="pending">history</mat-icon>
+                  <mat-icon *ngSwitchCase="'clock_out'" class="rotate-45 reject">arrow_downward</mat-icon>
+                </ng-template>
+                <mat-card class="timeline-item">
+                  <mat-card-content>
+                    <p class="my-1 weight-500 font-one-two-halves">{{ (item.attendance_time | date:'HH:mm:ss') }}</p>
+                    <!-- @note making changes added location will be applied when user start,stop break and clocked out.  -->
+                    <p class="font-one">{{ item.attendance_type }}</p>
+                    <p *ngIf="(item.attendance_type === 'clock_in' && item.attendance_url) || item.attendance_type === 'start_break' || item.attendance_type === 'stop_break' || item.attendance_type === 'clock_out'"
+                      class="my-1 d-flex justify-content-center align-items-center">
+                      <ngx-avatar class="theme_avatar" size="40" [round]="true" [src]="item.attendance_url"
+                        (click)="openDialog('image', item.attendance_url)"></ngx-avatar>
+                      <span *ngIf="item.lat && item.lng" class="pointer d-flex align-items-center"
+                        (click)="openDialog('location', item.lat ? item.lat : '' , item.lng ? item.lng : '')">
+                        <mat-icon>place</mat-icon>{{ getLocation(item.lat ? item.lat : '', item.lng ? item.lng : '')
+                        }}</span>
+                    </p>
+                  </mat-card-content>
+                </mat-card>
+              </ngx-mat-timeline-item>
+            </ngx-mat-timeline>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-3 mx-lg-4" *ngIf="reportingManagerOf && reportingManagerOf.length > 0">
+        <div class="col-12">
+          <h4 class="mb-0 weight-500 emp-name">Reporting manager of</h4>
+        </div>
+        <div class="col-6 d-flex my-2 align-items-center" *ngFor="let mgrOf of reportingManagerOf">
+          <ngx-avatar class="theme_avatar" size="32" [round]="true" name="{{ mgrOf.full_name }}"></ngx-avatar>
+          <p class="mb-0 weight-500 text-gray">{{ mgrOf.full_name }}</p>
+        </div>
+      </div>
+
+
+      <div class="row my-3 mx-lg-4">
+        <div class="col-12">
+          <h4 class="mb-0 weight-500 emp-name">Applied Leaves</h4>
+        </div>
+      </div>
+      <div class="row mx-lg-4">
+        <ng-container *ngIf="
+            singleUserLeave && singleUserLeave.length > 0;
+            else noEmployees
+          ">
+          <div class="col-12 d-flex justify-content-start sud my-2 pb-2 border-bottom" (click)="openLeaveDetail(item)"
+            *ngFor="let item of singleUserLeave" style="cursor: pointer">
+            <ngx-avatar cornerRadius="10" class="theme_avatar" size="40" [round]="false" name="{{ item.policy_name }}">
+            </ngx-avatar>
+            <div>
+              <p class="my-0 weight-500">
+                {{ item.start_date | date : "dd-MM-YYYY" }} to
+                {{ item.end_date | date : "dd-MM-YYYY" }}
+                ({{ item.days | number }} {{ item.days > 1 ? "days" : "day" }})
+              </p>
+              <p class="my-0">
+                {{ item.day_status_id == "1" ? "Full Day" : undefined }}
+                {{ item.day_status_id == "2" ? "First Half" : undefined }}
+                {{ item.day_status_id == "3" ? "Second Half" : undefined }}
+              </p>
+              <p class="my-0 weight-500" [ngSwitch]="item.status">
+                <span *ngSwitchCase="'1'" class="approved_leave">Approved</span>
+                <span *ngSwitchCase="'2'" class="pending_leave">Pending</span>
+                <span *ngSwitchCase="'3'" class="rejected_leave">Rejected</span>
+              </p>
+            </div>
+          </div>
+
+        </ng-container>
+        <ng-template #noEmployees>
+          <div class="col-12 mb-3">
+            <p class="my-0 weight-500">No leaves applied</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

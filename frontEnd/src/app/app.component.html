@@ -1,0 +1,48 @@
+<mat-sidenav-container class="example-container" autosize="true">
+  <mat-sidenav
+    #sidenav="matSidenav"
+    [class.menu-open]="isMenuOpened"
+    [class.menu-close]="!isMenuOpened"
+    [hidden]="!currentUser"
+  >
+    <app-side-nav
+      (toggleClicked)="contentEvent($event)"
+      [isMenu]="isMenuOpened"
+    >
+    </app-side-nav>
+    <!-- <h1>SIDENAV IS SUPPOSED TO BE HERE</h1> -->
+  </mat-sidenav>
+
+  <mat-sidenav-content
+    id="main-content-example"
+    [ngClass]="
+      currentUser ? (isMenuOpened ? 'side-menu-open' : 'side-menu-close') : ''
+    "
+  >
+    <div class="app-header header-shadow w-100">
+      <div class="app-header-left">
+        <div class="app-header__logo"></div>
+        <div class="header__pane ml-auto"></div>
+      </div>
+    </div>
+    <main class="h-100">
+      <button
+        mat-icon-button
+        class="menu-icon"
+        (click)="sideNav.toggle()"
+        [hidden]="!currentUser"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <!-- <mat-drawer-container hasBackdrop="false">
+          <mat-drawer #drawer mode="over" position="end"> -->
+      <!-- SIDE PANEL CONTENT -->
+      <!-- </mat-drawer>
+          <mat-drawer-content> -->
+      <router-outlet></router-outlet>
+      <!-- </mat-drawer-content>
+        </mat-drawer-container> -->
+      <!-- <h1>MAIN CONTENT SHOULD BE HERE</h1> -->
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

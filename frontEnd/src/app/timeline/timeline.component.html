@@ -1,0 +1,38 @@
+<div *ngFor="let log of finalArray">
+    <p>{{log}}</p> 
+    <div>
+        <!-- Clock in -->
+        <!-- {{clockIn}} -->
+    </div>
+    <!-- <div>
+        Break Start
+        {{breakStart}}
+    </div> -->
+    <!-- <div *ngFor="let finalLog of finalLogs">
+        {{finalLog.email}}
+    </div> -->
+    <!-- {{finalLogs | json}} -->
+    <!-- <div *ngFor="let timeLine of log.worklogsList">
+        <div>
+            <div class="hours">
+
+                <div class="clock_in_image" (click)="openDialog('image', timeLine.clockIn.image)" *ngIf="timeLine && timeLine.clockIn.image">
+                    <img [src]="timeLine.clockIn.image">
+                </div>
+            </div>
+            <div class="clockIn">
+                Clock In
+                {{timeLine.clockIn.time}}
+                <button mat-icon-button color="primary" (click)="openDialog('location', timeLine.clockIn.location)" *ngIf="timeLine && timeLine.clockIn.location">
+                    <mat-icon>place</mat-icon>
+                    {{ getLocation(timeLine.clockIn.location) }}
+                </button>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<div *ngFor="let log of userLogs">
+    <p>{{log | json}}</p> 
+    
+</div>

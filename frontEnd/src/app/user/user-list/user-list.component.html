@@ -1,0 +1,232 @@
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
+<mat-drawer-container hasBackdrop="false" class="h-100 mx-2 mx-sm-4">
+  <mat-drawer #drawer1 mode="over" position="end" class="side-drawer"
+    [ngClass]="ishistoryUser || isupdateUser ? 'side-drawer-full-width' : ''">
+    <!-- SIDE PANEL CONTENT -->
+    <div class="row my-2">
+      <div class="col-12 d-flex justify-content-end">
+        <mat-icon mat-icon-button class="pointer" (click)="closeDrawer()">close</mat-icon>
+      </div>
+    </div>
+    <div class="row" *ngIf="selectedUser && !isaddUser && !ishistoryUser && !isupdateUser">
+      <div class="col-12 p-0">
+        <single-user [user]="selectedUser" (editUser)="onEditUser()" (deleteUser)="deleteUser(selectedUser)"
+          (historyUser)="ishistoryUser = true"></single-user>
+      </div>
+    </div>
+    <div class="row" *ngIf="isaddUser">
+      <div class="col-12 p-0">
+        <app-add-user [roleList]="roleList" [reportingManagerList]="reportingManagerList" [data]="selectedUser"
+          (user)="adduser($event)"></app-add-user>
+      </div>
+    </div>
+    <div class="row" *ngIf="isupdateUser">
+      <div class="col-12 p-0">
+        <app-user-profile-update (closeDrawer)="closeDrawer()" [roleList]="roleList"
+          [reportingManagerList]="reportingManagerList" [user]="selectedUser">
+        </app-user-profile-update>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="ishistoryUser">
+      <div class="col-12 p-0">
+        <history-user [data]="selectedUser"></history-user>
+      </div>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer-content class="mt-4 px-2">
+    <!-- MAIN DRAWER CONTENT -->
+    <div class="row my-2">
+      <div class="col-md-9">
+        <h3 class="page-title float-left">Employees</h3>
+        <div>{{ userList.length }} employees</div>
+        <div class="my-2">
+          <div class="row" *ngIf="isLoading">
+            <div class="col-12 d-sm-flex">
+              <div class="selection-loader">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </div>
+              <div class="search-loader">
+                <ngx-skeleton-loader> </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+          <mat-form-field class="date_packer" appearance="outline" *ngIf="!isLoading">
+            <mat-label>Designation</mat-label>
+            <mat-select [(ngModel)]="roleSelect" (selectionChange)="onChange()" [disabled]="isLoading">
+              <mat-option value="">All</mat-option>
+              <mat-option *ngFor="let role of roleList" [value]="role.id">{{
+                role.title
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="search_bar mx-sm-3" appearance="outline" *ngIf="!isLoading">
+            <mat-label>Search employees</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input placeholder="Search employees" matInput placeholder="Search" type="text" [(ngModel)]="searchInput"
+              (ngModelChange)="onChange()" #input [disabled]="isLoading" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-md-3 d-flex justify-content-end d-sm-block text-end mb-3 mb-sm-0">
+        <button mat-raised-button class="cico-button" (click)="addUser()" [disabled]="isLoading">
+          Add User
+        </button>
+      </div>
+    </div>
+
+    <div class="row mb-3 mx-lg-4 users" *ngIf="isLoading">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2">
+        <div class="rect-card">
+          <ngx-skeleton-loader> </ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3" *ngIf="users && users.length > 0 && !isLoading; else noUsers">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 px-2 my-2" *ngFor="let user of users; let uIn = index">
+        <mat-card class="cico-card" (click)="viewUser(user)">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-3">
+                <ngx-avatar class="theme_avatar" size="50" name="{{ user.name }}"></ngx-avatar>
+              </div>
+              <div class="col-9" style="word-wrap: break-word">
+                <p class="mb-0 weight-500 emp-name">
+                  {{ user.name | titlecase }}
+                </p>
+                <p class="my-0">{{ user.email }}</p>
+                <p class="my-0">{{user.designation }}</p>
+                <p class="my-0">{{user.department }}</p>
+                <p class="my-0">{{ user.type | titlecase }}</p>
+                <p class="my-0">{{ user.job_id }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <ng-template #noUsers>
+      <div class="col-md-3 col-sm-12 text-center" *ngIf="!isLoading">
+        <p class="my-0 weight-500">
+          <span class="text-gray">No users found</span>
+        </p>
+      </div>
+    </ng-template>
+  </mat-drawer-content>
+</mat-drawer-container>

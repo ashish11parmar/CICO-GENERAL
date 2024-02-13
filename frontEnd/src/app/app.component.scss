@@ -1,0 +1,103 @@
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* background: #eee; */
+}
+
+mat-sidenav-content {
+  // padding: 0 0 0 50px;
+}
+
+mat-sidenav {
+  width: 200px;
+  border-right: none;
+  color: white;
+  text-align: center;
+  border-radius: 0px 20px 20px 0px;
+
+  &.menu-open {
+    width: 200px;
+  }
+
+  &.menu-close {
+    width: 70px;
+  }
+}
+
+.menu-close img.menu-logo {
+  max-width: 48px;
+}
+
+.menu-close .menu-button {
+  min-width: auto;
+  justify-content: center;
+}
+
+.menu-close .tab_name {
+  display: none !important;
+}
+
+.menu-close .user {
+  margin-right: 2px;
+}
+
+::ng-deep .menu-close .menu-button span>span {
+  display: none !important;
+}
+
+.menu-close #bottom {
+  right: 0;
+  margin: auto;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.open_toolbar {
+  left: 215px;
+}
+
+.side-menu-open {
+  margin-left: 200px !important;
+}
+
+.side-menu-close {
+  margin-left: 70px !important;
+}
+
+@media (max-width: 800px) {
+  #main-content-example {
+    
+   overflow: clip;
+  overflow-y: scroll;
+  }
+
+  .menu-icon {
+    display: block;
+    color: var(--theme-color-cico-orange);
+  }
+
+  .side-menu-close {
+    margin-left: 0px !important;
+  }
+
+  .side-menu-open {
+    margin-left: 0px !important;
+  }
+}
+
+// COMMON CSS
+
+.mat-form-field {
+  display: contents !important;
+}
+
+.app-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
