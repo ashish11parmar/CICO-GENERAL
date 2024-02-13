@@ -3,24 +3,17 @@ const Employee = require("../model/Userschema");
 // get all user from database
 const getAllEmployees = async (req, res) => {
     const employees = await Employee.find();
-    if (!employees) return res.status(204).json({ message: "No employees found" });
+    if (!employees) return res.status(400).json({ message: "No employee found.", data: { status: 400 } });
     res.json(employees);
 }
 
 // this function will Update the employee details using id 
 const updateEmployee = async (req, res) => {
     const { id } = req.params;
-    const { firstname, lastname, companyname, phone, email, password } = req.body;
-    if (!id) return res.status(400).json({ message: "Employee ID required" })
-    const employee = await Employee.findOne({ _id: id }).exec();
-    if (!employee) {
-        return res.status(400).json({ message: `Employee not found` })
-    }
-
-    console.log(employee, req.body);
-
-    const updatedEmployee = await Employee.findByIdAndUpdate(id, { firstname, lastname, companyname, phone, email, password }, { new: true })
-    updatedEmployee.save();
+    if (!id) return res.status(400).json({ message: "employee id is required.", data: { status: 400 } });
+    const employee = await Employee.findOne({ email: req.body.email })
+    if (employee) return res.status(400).json({ message: "Email already exists.", data: { status: 400 } });
+    const updatedEmployee = await Employee.findByIdAndUpdate(id, req.body, { new: true })
     res.status(200).json({ updatedEmployee })
 }
 
@@ -29,14 +22,10 @@ const updateEmployee = async (req, res) => {
 const deleteEmployee = async (req, res) => {
     const { id } = req.params;
     console.log(id);
-    if (!id) {
-        return res.status(400).json({ message: "Employee ID required" })
-    }
+    if (!id) return res.status(400).json({ message: "employee id is required.", data: { status: 400 } });
     const employee = await Employee.findOneAndDelete({ _id: id }).exec();
-    if (!employee) {
-        return res.status(400).json({ message: `Employee not found` })
-    }
-    res.status(200).json({ message: `Employee deleted` })
+    if (!employee) { return res.status(400).json({ message: "employee not found.", data: { status: 400 } }); }
+    res.status(400).json({ message: "employee deleted successfully", data: { status: 400 } });
 }
 
 module.exports = { getAllEmployees, updateEmployee, deleteEmployee }
