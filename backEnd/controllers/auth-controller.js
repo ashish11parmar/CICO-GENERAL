@@ -1,71 +1,48 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/Userschema');
-const bcrypt = require('bcrypt');
-
-
-
 
 // This functiuon is for login and generate jwt token
-const login = async (req, res) => {
-    const { email, password } = req.body;
-
-
-    if (!email, !password) {
-        return res.status(422).json({ error: "Plzz filled property" });
-    }
-
+const userLogin = async (req, res) => {
     try {
-        const login = await User.findOne({ email: email })
-        if (login) {
+        const { email, password } = req.body;
+        if (!email, !password) { return res.status(422).json({ message: "email and password are required" }) }
+        const userDetails = await User.findOne({ email: email })
+        if (userDetails) {
             // generate the token 
-            const token = jwt.sign({ _id: login._id }, process.env.SECRET_KEY)
+            const token = jwt.sign({ _id: userDetails._id }, process.env.SECRET_KEY)
             res.cookie('jwtoken', token, {
-                expires: new Date(Date.now() + 28800000), // 8 hours for token expire
+                expires: new Date(Date.now() + 28800000), // 8 hours for token expire 
                 httpOnly: true
             });
-
-            if (login.password === password) {
-                res.json({ message: "user signin successfully", token: token, status: 200 });
-            }
-            else {
-                res.status(400).json({ error: "Invalid Credential", status: 400 })
-
-            }
-
+            if (userDetails.password === password) { res.json({ message: "user signin successfully", token: token, data: { status: 200 } }); }
+            else { res.status(400).json({ message: "Invalid Credential", data: { status: 400 } }) }
         } else {
-            res.status(400).json({ error: "User not found", status: 400 })
+            res.status(404).json({ message: "User not found", data: { status: 404 } })
         }
-
-
     } catch (err) {
-        console.log(err);
+        return res.status(500).json({ message: "Internal Server Error", data: { status: 500 } })
     }
 }
 
 
 // This funcxtion will register new emoployee or signup with new company 
-const register = async (req, res) => {
-    const { firstname, lastname, companyname, phone, email, password } = req.body;
-
-    if (!firstname, !lastname, !companyname, !phone, !email, !password) {
-        return res.status(422).json({ error: "Plz filled property", status: 422 });
-    }
-
+const userSignup = async (req, res) => {
     try {
-
-        const response = await User.findOne({ email: email })
-        if (response) {
-            return res.status(422).json({ error: "user already exists" });
+        const { firstname, lastname, companyname, phone, email, password } = req.body;
+        if (!firstname, !lastname, !companyname, !phone, !email, !password) {
+            return res.status(400).json({ message: "All field are required.", data: { status: 400 } })
         }
-        const user = new User({ firstname, lastname, companyname, phone, email, password });
+        const response = await User.findOne({ email: email })
+        console.log(response);
+        if (response) { return res.status(400).json({ message: "user already exists.", data: { status: 400 } }) }
+        const user = new User(req.body);
         await user.save();
-        res.status(201).json({ message: "user registered succesfully" });
-
-
+        res.status(201).json({ message: "user registered succesfully", data: { status: 400 } });
     } catch (err) {
-        console.log(err);
+        return res.status(500).json({ message: "Internal Server Error", data: { status: 500 } })
+
     }
 
 }
 
-module.exports = { login, register }
+module.exports = { userLogin, userSignup }
