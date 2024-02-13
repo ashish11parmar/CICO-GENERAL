@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/Userschema');
 const bcrypt = require('bcrypt');
 
+
+
+
+// This functiuon is for login and generate jwt token
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -13,29 +17,23 @@ const login = async (req, res) => {
     try {
         const login = await User.findOne({ email: email })
         if (login) {
-
-            const ismatch = await bcrypt.compare(password, login.password);
-
             // generate the token 
-
-            const token = await login.generateAuthToken();
-            console.log(token);
-
+            const token = jwt.sign({ _id: login._id }, process.env.SECRET_KEY)
             res.cookie('jwtoken', token, {
-                expires: new Date(Date.now() + 25832000000),
+                expires: new Date(Date.now() + 691200000), // 8 dyas for token expire
                 httpOnly: true
             });
 
-            if (!ismatch) {
-                res.status(400).json({ error: "Invalid Credential" })
+            if (login.password === password) {
+                res.json({ message: "user signin successfully", token: token, status: 200 });
             }
             else {
-                res.json({ message: "user signin successfully" });
+                res.status(400).json({ error: "Invalid Credential", status: 400 })
 
             }
 
         } else {
-            res.status(400).json({ error: "Invalid Credential" })
+            res.status(400).json({ error: "User not found", status: 400 })
         }
 
 
@@ -45,10 +43,11 @@ const login = async (req, res) => {
 }
 
 
+// This funcxtion will register new emoployee or signup with new company 
 const register = async (req, res) => {
-    const { name, email, phone, work, password, cpassword } = req.body;
+    const { firstname, lastname, companyname, phone, email, password } = req.body;
 
-    if (!name, !email, !phone, !work, !password, !cpassword) {
+    if (!firstname, !lastname, !companyname, !phone, !email, !password) {
         return res.status(422).json({ error: "Plz filled property", status: 422 });
     }
 
@@ -58,7 +57,7 @@ const register = async (req, res) => {
         if (response) {
             return res.status(422).json({ error: "user already exists" });
         }
-        const user = new User({ name, email, phone, work, password, cpassword });
+        const user = new User({ firstname, lastname, companyname, phone, email, password });
         await user.save();
         res.status(201).json({ message: "user registered succesfully" });
 
