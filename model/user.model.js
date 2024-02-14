@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
-    firstname: {
+    firstName: {
         type: String,
         required: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true
     },
     companyname: {
-        type: String,
-        required: true
+        type: String
     },
-    phone: {
+    phoneNumber: {
         type: Number,
         required: true
     },
@@ -36,9 +35,16 @@ const UserSchema = new Schema({
     companyId: {
         type: Schema.Types.ObjectId,
         ref: 'user'
+    },
+    otp: {
+        type: Number
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     }
 });
-
+UserSchema.index({ otp: 1 }, { expireAfterSeconds: 3600 });
 const User = mongoose.model('user', UserSchema);
 
 module.exports = User;
