@@ -27,6 +27,10 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    isCompany: {
+        type: Boolean,
+        default: false,
     }
 
 });
