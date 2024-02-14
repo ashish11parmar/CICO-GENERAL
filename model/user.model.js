@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-const UserSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+const UserSchema = new Schema({
     firstname: {
         type: String,
         required: true
@@ -28,11 +28,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
     isCompany: {
         type: Boolean,
         default: false,
+    },
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
     }
-
 });
 
 const User = mongoose.model('user', UserSchema);

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../model/Userschema');
+const User = require('../model/user.model');
 
 // This functiuon is for login and generate jwt token
 const userLogin = async (req, res) => {

@@ -1,4 +1,4 @@
-const Employee = require("../model/Userschema");
+const Employee = require("../model/user.model");
 
 // get all user from database
 const getAllEmployees = async (req, res) => {
