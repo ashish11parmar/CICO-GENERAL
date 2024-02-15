@@ -207,7 +207,7 @@ const verifyOTP = async (req, res) => {
             return res.status(404).json({ message: "User not found." });
         }
         if (user.otp !== otp) {
-            return res.status(401).json({ message: "Invalid OTP." });
+            return res.status(401).json({ message: "The OTP entered is invalid please verify its accuracy." });
         }
         user.isVerified = true;
         await user.save();
@@ -218,6 +218,30 @@ const verifyOTP = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error." });
     }
 }
+
+const resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: "Email is required." });
+        }
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        // Generate a new OTP
+        const otp = Math.floor(1000 + Math.random() * 9000);
+        // Send the new OTP to the user's email
+        sendVerificationCode(email, otp);
+        await User.findOneAndUpdate({ email }, { $set: { otp: otp } }, { new: true })
+        // Update the user record in the database with the new OTP
+        return res.status(200).json({ message: "OTP resent successfully." });
+    } catch (error) {
+        console.error("Error resending OTP:", error);
+        return res.status(500).json({ message: "Internal Server Error." });
+    }
+}
+
 
 // get all user from database
 const getAllEmployees = async (req, res) => {
@@ -247,4 +271,4 @@ const deleteEmployee = async (req, res) => {
     res.status(400).json({ message: "employee deleted successfully", data: { status: 400 } });
 }
 
-module.exports = { userLogin, verifyOTP, userSignup, getAllEmployees, updateEmployee, deleteEmployee }
+module.exports = { userLogin, verifyOTP, userSignup, getAllEmployees, updateEmployee, deleteEmployee, resendOtp }
