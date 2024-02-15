@@ -5,8 +5,8 @@ const router = express.Router();
 
 
 // Routes for crud for register user 
-router.get('/', verifyToken, getAllEmployees)
-router.put('/employee/:id', verifyToken, updateEmployee)
-router.delete('/employee/:id', verifyToken, deleteEmployee) 
+router.get('/all', verifyToken, getAllEmployees)
+router.put('/:id', verifyToken, updateEmployee)
+router.delete('/:id', verifyToken, deleteEmployee) 
 
 module.exports = router;
