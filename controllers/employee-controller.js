@@ -40,7 +40,7 @@ const userLogin = async (req, res) => {
         } else {
             const otp = Math.floor(1000 + Math.random() * 9000);
             sendVerificationCode(req.body.email, otp)
-            const expire = Date.now() + 60 * 1000; // 1 minute from now
+            const expire = Date.now() + 600 * 1000; // 10 minute from now
             await User.findOneAndUpdate({ email }, { $set: { otp: otp } }, { new: true })
             await User.findOneAndUpdate({ email }, { $set: { otpExpire: expire } }, { new: true })
             return res.status(201).json({ msg: "Otp sent to your email" })
@@ -63,7 +63,7 @@ const userSignup = async (req, res) => {
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
         req.body.password = newPass;
         const otp = Math.floor(1000 + Math.random() * 9000);
-        const expire = Date.now() + 60 * 1000; // 1 minute from now
+        const expire = Date.now() + 600 * 1000; // 10 minute from now
         req.body.otp = otp;
         req.body.otpExpire = expire;
         sendVerificationCode(req.body.email, otp)
@@ -240,9 +240,11 @@ const resendOtp = async (req, res) => {
         }
         // Generate a new OTP
         const otp = Math.floor(1000 + Math.random() * 9000);
+        const expire = Date.now() + 600 * 1000; // 10 minute from now 
         // Send the new OTP to the user's email
         sendVerificationCode(email, otp);
         await User.findOneAndUpdate({ email }, { $set: { otp: otp } }, { new: true })
+        await User.findOneAndUpdate({ email }, { $set: { otpExpire: expire } }, { new: true })
         // Update the user record in the database with the new OTP
         return res.status(200).json({ message: "OTP resent successfully." });
     } catch (error) {
