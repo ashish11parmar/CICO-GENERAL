@@ -38,12 +38,12 @@ const userLogin = async (req, res) => {
 // This funcxtion will register new emoployee or signup with new company 
 const userSignup = async (req, res) => {
     try {
-        const { firstname, lastname, companyname, phone, email, password } = req.body;
-        if (!firstname, !lastname, !companyname, !phone, !email, !password) {
+        const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
+        if (!firstName || !lastName || !companyname || !phoneNumber || !email || !password) {
             return res.status(400).json({ message: "All field are required.", data: { status: 400 } })
         }
-
         const response = await User.findOne({ email: email })
+        console.log(response);
         const otp = Math.floor(1000 + Math.random() * 9000);
         req.body.otp = otp;
         sendVerificationCode(req.body.email, otp)
@@ -52,7 +52,8 @@ const userSignup = async (req, res) => {
         await user.save();
         res.status(201).json({ message: "user registered succesfully", data: { status: 400 } });
     } catch (err) {
-        return res.status(500).json({ message: "Internal Server Error", data: { status: 500 } })
+        console.log(err);
+        return res.status(500).json({ message: "Internal Server Error...", data: { status: 500 } })
 
     }
 
