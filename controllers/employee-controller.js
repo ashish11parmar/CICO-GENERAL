@@ -2,6 +2,7 @@ const Employee = require("../model/user.model");
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
+const CryptoJS = require('crypto-js');
 
 
 // This functiuon is for login and generate jwt token
@@ -10,21 +11,34 @@ const userLogin = async (req, res) => {
         const { email, password } = req.body;
         if (!email, !password) { return res.status(422).json({ message: "email and password are required" }) }
         const userDetails = await User.findOne({ email: email })
+
+        const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
+        const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
+        if (!isPasswordCorrect)
+            return res.status(500).json({ message: "Password is incorrect!", data: { status: 500 } })
+
         if (userDetails) {
-            if (userDetails.isVerified) { /**@note If user is verified then token will generate. */
-                // generate the token 
+            if (userDetails.isVerified) {
                 const token = jwt.sign({ _id: userDetails._id }, process.env.SECRET_KEY)
                 res.cookie('jwtoken', token, {
                     expires: new Date(Date.now() + 28800000), // 8 hours for token expire 
                     httpOnly: true
                 });
-                if (userDetails.password === password) { res.json({ message: "user signin successfully", token: token, data: { status: 200 } }); }
-                else { res.status(400).json({ message: "Invalid Credential", data: { status: 400 } }) }
-            } else { /**@note If user is not verified then otp will sent user email. */
+                // cerate payload for give response in client side.
+                const userdata = {
+                    token: token,
+                    id: userDetails._id,
+                    user_display_name: userDetails.firstName + userDetails.lastName,
+                    phoneNumber: userDetails.phoneNumber,
+                    user_email: userDetails.email,
+                    isVerified: userDetails.isVerified
+                }
+                return res.json({ msg: "user signin successfully", data: userdata });
+            } else {
                 const otp = Math.floor(1000 + Math.random() * 9000);
                 sendVerificationCode(req.body.email, otp)
                 await User.findOneAndUpdate({ email }, { $set: { otp: otp } }, { new: true })
-                res.status(404).json({ message: "Otp send In your email", data: { status: 404 } })
+                return res.status(201).json({ message: "Otp send In your email", data: { status: 404, isVerified: false } })
             }
         } else {
             res.status(404).json({ message: "User not found", data: { status: 404 } })
@@ -43,7 +57,8 @@ const userSignup = async (req, res) => {
             return res.status(400).json({ message: "All field are required.", data: { status: 400 } })
         }
         const response = await User.findOne({ email: email })
-        console.log(response);
+        const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
+        req.body.password = newPass;
         const otp = Math.floor(1000 + Math.random() * 9000);
         req.body.otp = otp;
         sendVerificationCode(req.body.email, otp)
@@ -185,7 +200,7 @@ const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
         if (!email || !otp) {
-            return res.status(400).json({ message: "Email and OTP are required." });
+            return res.status(400).json({ message: "OTP is required." });
         }
         const user = await User.findOne({ email });
         if (!user) {
@@ -197,7 +212,7 @@ const verifyOTP = async (req, res) => {
         user.isVerified = true;
         await user.save();
         await User.findOneAndUpdate({ email }, { $unset: { otp: 1 } }, { new: true });
-        return res.status(200).json({ message: "Email verified successfully." });
+        return res.status(200).json({ message: "Email verified successfully.", data: { status: 200 } });
     } catch (error) {
         console.error("Error verifying OTP:", error);
         return res.status(500).json({ message: "Internal Server Error." });
