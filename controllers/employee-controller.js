@@ -1,4 +1,3 @@
-const Employee = require("../model/user.model");
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
@@ -281,7 +280,7 @@ const createEmployee = async (req, res) => {
             companyId: company._id // Assign the company's ObjectId to the employee's companyId field
         });
         await employee.save();
-        res.status(201).json({ msg: "employee registered succesfully", data: { status: 400 } });
+        res.status(201).json({ msg: "employee added succesfully", data: { status: 400 } });
 
     } catch (error) {
         console.error("Error creating employee:", error);
@@ -310,6 +309,7 @@ const getEmployeesCompanyWise = async (req, res) => {
             return res.status(404).json({ msg: "No employees found for this company.", data: { status: 404 } });
         }
         let employePayload = [];
+        // Payload created for the somefeild are send to client side 
         for (let i = 0; i < employees.length; i++) {
             const employee = employees[i];
             const employeePayload = {
@@ -317,10 +317,6 @@ const getEmployeesCompanyWise = async (req, res) => {
                 lastName: employee.lastName,
                 phoneNumber: employee.phoneNumber,
                 email: employee.email,
-                // password: employee.password,
-                // isCompany: employee.isCompany,
-                // isVerified: employee.isVerified,
-                // companyId: employee.companyId,
                 _id: employee._id
             };
             employePayload.push(employeePayload);
@@ -340,9 +336,9 @@ const getEmployeesCompanyWise = async (req, res) => {
 const updateEmployee = async (req, res) => {
     const { id } = req.params;
     if (!id) return res.status(400).json({ msg: "employee id is required.", data: { status: 400 } });
-    const employee = await Employee.findOne({ email: req.body.email })
+    const employee = await User.findOne({ email: req.body.email })
     if (employee) return res.status(400).json({ msg: "Email already exists.", data: { status: 400 } });
-    const updatedEmployee = await Employee.findByIdAndUpdate(id, req.body, { new: true })
+    const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
     res.status(200).json({ updatedEmployee })
 }
 
@@ -352,7 +348,7 @@ const deleteEmployee = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     if (!id) return res.status(400).json({ msg: "employee id is required.", data: { status: 400 } });
-    const employee = await Employee.findOneAndDelete({ _id: id }).exec();
+    const employee = await User.findOneAndDelete({ _id: id }).exec();
     if (!employee) { return res.status(400).json({ msg: "employee not found.", data: { status: 400 } }); }
     res.status(400).json({ msg: "employee deleted successfully", data: { status: 400 } });
 }

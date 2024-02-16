@@ -8,6 +8,6 @@ const router = express.Router();
 router.post('/:email', verifyToken, createEmployee)
 router.get('/all/:email', verifyToken, getEmployeesCompanyWise)
 router.put('/:id', verifyToken, updateEmployee)
-router.delete('/:id', verifyToken, deleteEmployee) 
+router.delete('/:id', verifyToken, deleteEmployee)
 
 module.exports = router;
