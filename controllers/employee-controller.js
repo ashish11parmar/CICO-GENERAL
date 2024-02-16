@@ -243,7 +243,7 @@ const resendOtp = async (req, res) => {
         const expire = Date.now() + 600 * 1000; // 10 minute from now 
         // Send the new OTP to the user's email
         sendVerificationCode(email, otp);
-        await User.findOneAndUpdate({ email }, { $set: { otp: otp } }, { new: true })
+        await User.findOneAndUpdate({ email }, { $set: { otp: otp }, }, { new: true })
         await User.findOneAndUpdate({ email }, { $set: { otpExpire: expire } }, { new: true })
         // Update the user record in the database with the new OTP
         return res.status(200).json({ message: "OTP resent successfully." });
@@ -253,13 +253,72 @@ const resendOtp = async (req, res) => {
     }
 }
 
+// This function will create new employee company wise 
+const createEmployee = async (req, res) => {
+    try {
+        const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
+        if (!firstName || !lastName || !phoneNumber || !email || !password) {
+            return res.status(400).json({ msg: "All field are required.", data: { status: 400 } })
+        }
+        const companyEmail = req.params
+        const company = await User.findOne(companyEmail); // Getting company details
+        if (!company) {
+            return res.status(400).json({ msg: "Company not found.", data: { status: 400 } })
+        }
+        const emp = await User.findOne({ email });
+        if (emp) {
+            return res.status(400).json({ msg: "Email already exists.", data: { status: 400 } })
+        }
+        // If the company exists and is valid, create the employee
+        const employee = new User({
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+            password,
+            isCompany: false,
+            isVerified: true,
+            companyId: company._id // Assign the company's ObjectId to the employee's companyId field
+        });
+        await employee.save();
+        res.status(201).json({ msg: "employee registered succesfully", data: { status: 400 } });
+
+    } catch (error) {
+        console.error("Error creating employee:", error);
+        res.status(500).json({ msg: "Internal server error", data: { status: 500 } });
+    }
+}
 
 // get all user from database
-const getAllEmployees = async (req, res) => {
-    const employees = await Employee.find();
-    if (!employees) return res.status(400).json({ msg: "No employee found.", data: { status: 400 } });
-    res.json(employees);
+const getEmployeesCompanyWise = async (req, res) => {
+    try {
+        // Extract company email from request parameters
+        const companyEmail = req.params;
+
+        // Find the company based on the provided email
+        const company = await User.findOne(companyEmail);
+
+        // Check if the company exists
+        if (!company) {
+            return res.status(404).json({ msg: "Company not found.", data: { status: 404 } });
+        }
+
+        // Retrieve all employees for the found company
+        const employees = await User.find({ companyId: company._id });
+
+        if (!employees || employees.length === 0) {
+            return res.status(404).json({ msg: "No employees found for this company.", data: { status: 404 } });
+        }
+
+        // If employees are found, return them
+        res.status(200).json({ msg: "Employees found for the company.", data: { status: 200, employees: employees } });
+    } catch (error) {
+        console.error("Error fetching employees:", error);
+        res.status(500).json({ msg: "Internal server error", data: { status: 500 } });
+    }
 }
+
+
 
 // this function will Update the employee details using id 
 const updateEmployee = async (req, res) => {
@@ -282,4 +341,4 @@ const deleteEmployee = async (req, res) => {
     res.status(400).json({ msg: "employee deleted successfully", data: { status: 400 } });
 }
 
-module.exports = { userLogin, verifyOTP, userSignup, getAllEmployees, updateEmployee, deleteEmployee, resendOtp }
+module.exports = { userLogin, verifyOTP, userSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp }
