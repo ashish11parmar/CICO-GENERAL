@@ -309,9 +309,25 @@ const getEmployeesCompanyWise = async (req, res) => {
         if (!employees || employees.length === 0) {
             return res.status(404).json({ msg: "No employees found for this company.", data: { status: 404 } });
         }
+        let employePayload = [];
+        for (let i = 0; i < employees.length; i++) {
+            const employee = employees[i];
+            const employeePayload = {
+                firstName: employee.firstName,
+                lastName: employee.lastName,
+                phoneNumber: employee.phoneNumber,
+                email: employee.email,
+                // password: employee.password,
+                // isCompany: employee.isCompany,
+                // isVerified: employee.isVerified,
+                // companyId: employee.companyId,
+                _id: employee._id
+            };
+            employePayload.push(employeePayload);
+        }
 
         // If employees are found, return them
-        res.status(200).json({ msg: "Employees found for the company.", data: { status: 200, employees: employees } });
+        res.status(200).json({ msg: "Employees found for the company.", data: { status: 200, employees: employePayload } });
     } catch (error) {
         console.error("Error fetching employees:", error);
         res.status(500).json({ msg: "Internal server error", data: { status: 500 } });
