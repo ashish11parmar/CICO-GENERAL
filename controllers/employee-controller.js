@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
 const CryptoJS = require('crypto-js');
+const fs = require('fs');
+const path = require('path');
+const handlebars = require('handlebars');
+
 
 
 // This functiuon is for login and generate jwt token
@@ -80,106 +84,14 @@ const userSignup = async (req, res) => {
 
 
 const sendVerificationCode = async (email, otp) => {
+    const emailTemplateSource = fs.readFileSync(path.join(__dirname, "../views/verification.hbs"), "utf8")
+    const otpTemplate = handlebars.compile(emailTemplateSource)
+    const htmlToSend = otpTemplate({ otp })
     const mailOptions = {
         from: process.env.AUTH_EMAIL,
         to: email,
         subject: "CICO Application - OTP Verification",
-        html: `
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CICO Application - OTP Verification</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .conatiner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .email-container {
-            background-color: #fff;
-            padding: 20px;
-            width: 50%;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border: 2px solid #FF8400;
-        }
-
-        .company-logo {
-            width: 20%;
-            margin-bottom: 20px;
-        }
-
-        .otp-code {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #FF8400;
-        }
-
-        .instructions {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .cta-btn {
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-        }
-
-        .company-info {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .copyright {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #777;
-        }
-    </style>
-</head>
-<body>
-<div class="conatiner">
-    <div class="email-container">
-        <img src="https://i.ibb.co/PmWnNqx/new-logo.png" alt="Company Logo" class="company-logo">
-        <h2>CICO Admin - OTP Verification</h2>
-        <p>Dear User</p>
-        
-        <p class="otp-code">Your OTP: <strong>${otp}</strong></p>
-
-        <p class="instructions">Please use the following OTP to complete the verification process for the CICO Admin panel.</p>
-
-        <div class="company-info">
-            <p>Rao Information Technology</p>
-            <p>T.N.Rao College, Nr, Saurashtra University Campus, Rajkot</p>
-            <p>Contact: +91 7808780826</p>
-        </div>
-
-        <div class="copyright">
-            <p>&copy; 2024 CICO Rewards & Recognition.</p>
-        </div>
-    </div>
-    </div>
-</body>
-</html>
-        `
+        html: htmlToSend
     }
 
 
@@ -268,13 +180,14 @@ const createEmployee = async (req, res) => {
         if (emp) {
             return res.status(400).json({ msg: "Email already exists.", data: { status: 400 } })
         }
+        const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
         // If the company exists and is valid, create the employee
         const employee = new User({
             firstName,
             lastName,
             phoneNumber,
             email,
-            password,
+            password: newPass,
             isCompany: false,
             isVerified: true,
             companyId: company._id // Assign the company's ObjectId to the employee's companyId field
@@ -350,7 +263,7 @@ const deleteEmployee = async (req, res) => {
     if (!id) return res.status(400).json({ msg: "employee id is required.", data: { status: 400 } });
     const employee = await User.findOneAndDelete({ _id: id }).exec();
     if (!employee) { return res.status(400).json({ msg: "employee not found.", data: { status: 400 } }); }
-    res.status(400).json({ msg: "employee deleted successfully", data: { status: 400 } });
+    res.status(200).json({ msg: "employee deleted successfully" });
 }
 
 module.exports = { userLogin, verifyOTP, userSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp }
