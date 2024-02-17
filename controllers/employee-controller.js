@@ -27,7 +27,7 @@ const userLogin = async (req, res) => {
         if (userDetails.isVerified) {
             const token = jwt.sign({ _id: userDetails._id }, process.env.SECRET_KEY)
             res.cookie('jwtoken', token, {
-                expires: new Date(Date.now() + 28800000), // 8 hours for token expire
+                expires: new Date(Date.now() + 28800000), //   8 hours for token expire
                 httpOnly: true
             });
             // create payload for giving response in the client-side.
@@ -73,7 +73,7 @@ const userSignup = async (req, res) => {
         if (response) { return res.status(400).json({ msg: "user already exists.", data: { status: 400 } }) }
         const user = new User(req.body);
         await user.save();
-        res.status(201).json({ msg: "user registered succesfully", data: { status: 400 } });
+        res.status(201).json({ msg: "user registered succesfully" });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ msg: "Internal Server Error...", data: { status: 500 } })
@@ -116,26 +116,26 @@ const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
         if (!email || !otp) {
-            return res.status(400).json({ msg: "OTP is required." });
+            return res.status(400).json({ msg: "OTP is required.", data: { status: 400 } });
         }
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ msg: "User not found." });
+            return res.status(404).json({ msg: "User not found.", data: { status: 400 } });
         }
         if (user.otp !== otp) {
-            return res.status(401).json({ message: "The OTP entered is invalid please verify its accuracy." });
+            return res.status(401).json({ message: "The OTP entered is invalid please verify its accuracy.", data: { status: 401 } });
         }
         if (user.otpExpire && new Date() > new Date(user.otpExpire)) {
-            return res.status(401).json({ msg: "OTP has expired." });
+            return res.status(401).json({ msg: "OTP has expired.", data: { status: 500 } });
         }
         user.isVerified = true;
         await user.save();
         await User.findOneAndUpdate({ email }, { $unset: { otp: 1 } }, { new: true });
         await User.findOneAndUpdate({ email }, { $unset: { otpExpire: 1 } }, { new: true });
-        return res.status(200).json({ msg: "Email verified successfully.", data: { status: 200 } });
+        return res.status(200).json({ msg: "Email verified successfully." });
     } catch (error) {
         console.error("Error verifying OTP:", error);
-        return res.status(500).json({ msg: "Internal Server Error." });
+        return res.status(500).json({ msg: "Internal Server Error.", data: { status: 500 } });
     }
 }
 
@@ -167,7 +167,7 @@ const resendOtp = async (req, res) => {
 // This function will create new employee company wise 
 const createEmployee = async (req, res) => {
     try {
-        const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
+        const { firstName, lastName, phoneNumber, email, password } = req.body;
         if (!firstName || !lastName || !phoneNumber || !email || !password) {
             return res.status(400).json({ msg: "All field are required.", data: { status: 400 } })
         }
@@ -236,7 +236,7 @@ const getEmployeesCompanyWise = async (req, res) => {
         }
 
         // If employees are found, return them
-        res.status(200).json({ msg: "Employees found for the company.", data: { status: 200, employees: employePayload } });
+        res.status(200).json({ msg: "Employees found for the company.", data: { employees: employePayload } });
     } catch (error) {
         console.error("Error fetching employees:", error);
         res.status(500).json({ msg: "Internal server error", data: { status: 500 } });

@@ -1,6 +1,6 @@
 const express = require('express');
 const { getEmployeesCompanyWise, updateEmployee, deleteEmployee, createEmployee } = require('../controllers/employee-controller');
-const { verifyToken } = require('../utils/verifyToken');
+const { verifyToken } = require('../services/verifyToken');
 const router = express.Router();
 
 
