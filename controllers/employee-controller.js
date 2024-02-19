@@ -301,4 +301,21 @@ const deleteEmployee = async (req, res) => {
     res.status(200).json({ msg: "employee deleted successfully" });
 }
 
-module.exports = { adminLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, userLogin }
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(204).json({ msg: "email is required" })
+        }
+        const userDetails = await User.findOne({ email: email })
+        console.log("userDetails:", userDetails)
+        if (!userDetails) {
+            return res.status(404).json({ msg: "User not found" })
+        }
+    }
+    catch (error) {
+        return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
+    }
+}
+
+module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword }
