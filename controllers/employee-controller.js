@@ -9,15 +9,15 @@ const handlebars = require('handlebars');
 
 
 // This functiuon is for login and generate jwt token
-const userLogin = async (req, res) => {
+const adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(204).json({ msg: "email and password are required" })
         }
-        const userDetails = await User.findOne({ email: email })
+        const userDetails = await User.findOne({ email: email }) // find user details using email
         if (!userDetails) {
-            return res.status(404).json({ msg: "User not found" })
+            return res.status(404).json({ msg: "Email not found" })
         }
         const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
         const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
@@ -25,20 +25,19 @@ const userLogin = async (req, res) => {
             return res.status(500).json({ msg: "Password is incorrect!" })
         }
         if (userDetails.isVerified) {
-
             const token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, //  8 hours for token expire
+                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24 hours for token expire
                 id: userDetails._id,
             }, process.env.SECRET_KEY);
             res.cookie('access_token', token, {
-                expires: new Date(Date.now() + 28800000), //   8 hours for token expire
+                expires: new Date(Date.now() + 86400), // 24 hours for token expire
                 httpOnly: true
             });
             // create payload for giving response in the client-side.
             const userdata = {
                 token: token,
                 id: userDetails._id,
-                user_display_name: userDetails.firstName + userDetails.lastName,
+                user_display_name: userDetails.firstName + ' ' + userDetails.lastName,
                 phoneNumber: userDetails.phoneNumber,
                 user_email: userDetails.email,
                 isVerified: userDetails.isVerified
@@ -57,10 +56,50 @@ const userLogin = async (req, res) => {
     }
 }
 
+const userLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ msg: "email and password are required." })
+        }
+        const userDetails = await User.findOne({ email: email }) // find user details using email
+        if (!userDetails) {
+            return res.status(404).json({ msg: "Email not found" })
+        }
+        const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
+        const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
+        console.log(!userDetails.isCompany);
+        if (isPasswordCorrect !== password && !userDetails.isCompany) {
+            const token = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24 hours for token expire
+                id: userDetails._id,
+            }, process.env.SECRET_KEY);
+
+            res.cookie('access_token', token, {
+                expires: new Date(Date.now() + 86400), // 24 hours for token expire
+                httpOnly: true
+            });
+
+            const userdata = {
+                token: token,
+                id: userDetails._id,
+                user_display_name: userDetails.firstName + ' ' + userDetails.lastName,
+                phoneNumber: userDetails.phoneNumber,
+                user_email: userDetails.email,
+                isVerified: userDetails.isVerified
+            }
+            return res.json({ msg: "user signed in successfully", data: userdata });
+        } else {
+            return res.status(500).json({ msg: "Something went wrong" })
+        }
+    } catch (error) {
+        return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
+    }
+}
 
 
 // This funcxtion will register new emoployee or signup with new company 
-const userSignup = async (req, res) => {
+const adminSignup = async (req, res) => {
     try {
         const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
         if (!firstName || !lastName || !companyname || !phoneNumber || !email || !password) {
@@ -262,4 +301,4 @@ const deleteEmployee = async (req, res) => {
     res.status(200).json({ msg: "employee deleted successfully" });
 }
 
-module.exports = { userLogin, verifyOTP, userSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp }
+module.exports = { adminLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, userLogin }

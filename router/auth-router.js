@@ -1,11 +1,12 @@
 const express = require('express');
-const { userSignup, userLogin, verifyOTP, resendOtp } = require('../controllers/employee-controller');
+const { adminSignup, adminLogin, verifyOTP, resendOtp, userLogin } = require('../controllers/employee-controller');
 const router = express.Router();
 
 // routes for register and login 
-router.post('/signup', userSignup)
-router.post('/signin', userLogin);
+router.post('/signup', adminSignup)
+router.post('/signin', adminLogin);
 router.post('/verifyotp', verifyOTP)
 router.post('/resentotp', resendOtp)
+router.post('/login', userLogin)
 
 module.exports = router;

@@ -7,8 +7,12 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//_______MainRoute________//
 app.use('/', indexRouter)
 
+//_______Port listen_______//
 app.listen(PORT, () => {
     console.log(`${PORT} is running`);
 })
