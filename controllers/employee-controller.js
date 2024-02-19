@@ -216,7 +216,6 @@ const createEmployee = async (req, res) => {
             return res.status(400).json({ msg: "All field are required." })
         }
         const company = await User.find({ _id: companyId }) // Getting company details
-        console.log(company);
         if (!company) {
             return res.status(400).json({ msg: "Company not found." })
         }
@@ -225,6 +224,7 @@ const createEmployee = async (req, res) => {
             return res.status(400).json({ msg: "Email already exists." })
         }
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
+        console.log(company);
         // If the company exists and is valid, create the employee
         const employee = new User({
             firstName,
@@ -234,7 +234,7 @@ const createEmployee = async (req, res) => {
             password: newPass,
             isCompany: false,
             isVerified: false,
-            companyId: company._id // Assign the company's ObjectId to the employee's companyId field
+            companyId: companyId // Assign the company's ObjectId to the employee's companyId field
         });
         await employee.save();
         res.status(201).json({ msg: "employee added succesfully" });
