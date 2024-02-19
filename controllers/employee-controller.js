@@ -13,20 +13,24 @@ const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(204).json({ msg: "email and password are required", data: { status: 204 } })
+            return res.status(204).json({ msg: "email and password are required" })
         }
         const userDetails = await User.findOne({ email: email })
         if (!userDetails) {
-            return res.status(404).json({ msg: "User not found", data: { status: 404 } })
+            return res.status(404).json({ msg: "User not found" })
         }
         const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
         const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
         if (isPasswordCorrect !== password) {
-            return res.status(500).json({ msg: "Password is incorrect!", data: { status: 500 } })
+            return res.status(500).json({ msg: "Password is incorrect!" })
         }
         if (userDetails.isVerified) {
-            const token = jwt.sign({ _id: userDetails._id }, process.env.SECRET_KEY)
-            res.cookie('jwtoken', token, {
+
+            const token = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, //  8 hours for token expire
+                id: userDetails._id,
+            }, process.env.SECRET_KEY);
+            res.cookie('access_token', token, {
                 expires: new Date(Date.now() + 28800000), //   8 hours for token expire
                 httpOnly: true
             });
@@ -49,7 +53,7 @@ const userLogin = async (req, res) => {
             return res.status(201).json({ msg: "Otp sent to your email" })
         }
     } catch (error) {
-        return res.status(500).json({ msg: "Something went wrong", data: { status: 500, err: error } })
+        return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
     }
 }
 
@@ -60,7 +64,7 @@ const userSignup = async (req, res) => {
     try {
         const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
         if (!firstName || !lastName || !companyname || !phoneNumber || !email || !password) {
-            return res.status(400).json({ msg: "All field are required.", data: { status: 400 } })
+            return res.status(400).json({ msg: "All field are required.", })
         }
         const response = await User.findOne({ email: email })
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
@@ -70,13 +74,13 @@ const userSignup = async (req, res) => {
         req.body.otp = otp;
         req.body.otpExpire = expire;
         sendVerificationCode(req.body.email, otp)
-        if (response) { return res.status(400).json({ msg: "user already exists.", data: { status: 400 } }) }
+        if (response) { return res.status(400).json({ msg: "user already exists.", }) }
         const user = new User(req.body);
         await user.save();
         res.status(201).json({ msg: "user registered succesfully" });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({ msg: "Internal Server Error...", data: { status: 500 } })
+        return res.status(500).json({ msg: "Internal Server Error..." })
 
     }
 
@@ -116,17 +120,17 @@ const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
         if (!email || !otp) {
-            return res.status(400).json({ msg: "OTP is required.", data: { status: 400 } });
+            return res.status(400).json({ msg: "OTP is required.", });
         }
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ msg: "User not found.", data: { status: 400 } });
+            return res.status(404).json({ msg: "User not found.", });
         }
         if (user.otp !== otp) {
-            return res.status(401).json({ message: "The OTP entered is invalid please verify its accuracy.", data: { status: 401 } });
+            return res.status(401).json({ message: "The OTP entered is invalid please verify its accuracy." });
         }
         if (user.otpExpire && new Date() > new Date(user.otpExpire)) {
-            return res.status(401).json({ msg: "OTP has expired.", data: { status: 500 } });
+            return res.status(401).json({ msg: "OTP has expired." });
         }
         user.isVerified = true;
         await user.save();
@@ -135,7 +139,7 @@ const verifyOTP = async (req, res) => {
         return res.status(200).json({ msg: "Email verified successfully." });
     } catch (error) {
         console.error("Error verifying OTP:", error);
-        return res.status(500).json({ msg: "Internal Server Error.", data: { status: 500 } });
+        return res.status(500).json({ msg: "Internal Server Error." });
     }
 }
 
@@ -166,19 +170,20 @@ const resendOtp = async (req, res) => {
 
 // This function will create new employee company wise 
 const createEmployee = async (req, res) => {
+    const companyId = req.user.id
     try {
         const { firstName, lastName, phoneNumber, email, password } = req.body;
         if (!firstName || !lastName || !phoneNumber || !email || !password) {
-            return res.status(400).json({ msg: "All field are required.", data: { status: 400 } })
+            return res.status(400).json({ msg: "All field are required." })
         }
-        const companyEmail = req.params
-        const company = await User.findOne(companyEmail); // Getting company details
+        const company = await User.find({ _id: companyId }) // Getting company details
+        console.log(company);
         if (!company) {
-            return res.status(400).json({ msg: "Company not found.", data: { status: 400 } })
+            return res.status(400).json({ msg: "Company not found." })
         }
         const emp = await User.findOne({ email });
         if (emp) {
-            return res.status(400).json({ msg: "Email already exists.", data: { status: 400 } })
+            return res.status(400).json({ msg: "Email already exists." })
         }
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
         // If the company exists and is valid, create the employee
@@ -189,42 +194,32 @@ const createEmployee = async (req, res) => {
             email,
             password: newPass,
             isCompany: false,
-            isVerified: true,
+            isVerified: false,
             companyId: company._id // Assign the company's ObjectId to the employee's companyId field
         });
         await employee.save();
-        res.status(201).json({ msg: "employee added succesfully", data: { status: 400 } });
+        res.status(201).json({ msg: "employee added succesfully" });
 
     } catch (error) {
         console.error("Error creating employee:", error);
-        res.status(500).json({ msg: "Internal server error", data: { status: 500 } });
+        res.status(500).json({ msg: "Internal server error" });
     }
 }
 
 // get all user from database
 const getEmployeesCompanyWise = async (req, res) => {
+    const companyId = req.user.id
     try {
-        // Extract company email from request parameters
-        const companyEmail = req.params;
-
-        // Find the company based on the provided email
-        const company = await User.findOne(companyEmail);
-
-        // Check if the company exists
-        if (!company) {
-            return res.status(404).json({ msg: "Company not found.", data: { status: 404 } });
-        }
-
         // Retrieve all employees for the found company
-        const employees = await User.find({ companyId: company._id });
-
+        const employees = await User.find({ companyId: companyId });
         if (!employees || employees.length === 0) {
-            return res.status(404).json({ msg: "No employees found for this company.", data: { status: 404 } });
+            return res.status(404).json({ msg: "No employees found for this company." });
         }
         let employePayload = [];
         // Payload created for the somefeild are send to client side 
         for (let i = 0; i < employees.length; i++) {
             const employee = employees[i];
+            console.log(employee);
             const employeePayload = {
                 firstName: employee.firstName,
                 lastName: employee.lastName,
@@ -234,12 +229,13 @@ const getEmployeesCompanyWise = async (req, res) => {
             };
             employePayload.push(employeePayload);
         }
+        console.log(employePayload);
 
         // If employees are found, return them
         res.status(200).json({ msg: "Employees found for the company.", data: { employees: employePayload } });
     } catch (error) {
         console.error("Error fetching employees:", error);
-        res.status(500).json({ msg: "Internal server error", data: { status: 500 } });
+        res.status(500).json({ msg: "Internal server error" });
     }
 }
 
@@ -248,9 +244,9 @@ const getEmployeesCompanyWise = async (req, res) => {
 // this function will Update the employee details using id 
 const updateEmployee = async (req, res) => {
     const { id } = req.params;
-    if (!id) return res.status(400).json({ msg: "employee id is required.", data: { status: 400 } });
+    if (!id) return res.status(400).json({ msg: "employee id is required.", });
     const employee = await User.findOne({ email: req.body.email })
-    if (employee) return res.status(400).json({ msg: "Email already exists.", data: { status: 400 } });
+    if (employee) return res.status(400).json({ msg: "Email already exists.", });
     const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
     res.status(200).json({ updatedEmployee })
 }
@@ -260,9 +256,9 @@ const updateEmployee = async (req, res) => {
 const deleteEmployee = async (req, res) => {
     const { id } = req.params;
     console.log(id);
-    if (!id) return res.status(400).json({ msg: "employee id is required.", data: { status: 400 } });
+    if (!id) return res.status(400).json({ msg: "employee id is required.", });
     const employee = await User.findOneAndDelete({ _id: id }).exec();
-    if (!employee) { return res.status(400).json({ msg: "employee not found.", data: { status: 400 } }); }
+    if (!employee) { return res.status(400).json({ msg: "employee not found.", }); }
     res.status(200).json({ msg: "employee deleted successfully" });
 }
 
