@@ -5,6 +5,9 @@ const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
+const { employeeRoles, employeDepartment, employeeStatus, employeeType } = require('../config/staticList');
+
+
 
 
 
@@ -148,9 +151,9 @@ const sendVerificationCode = async (email, otp) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.error("Error sending email:", error);
+            console.error("Error sending email:", error); 
         } else {
-            console.log("Email sent:", info.response);
+            console.log("Email sent:", info);
         }
     });
 }
@@ -224,7 +227,6 @@ const createEmployee = async (req, res) => {
             return res.status(400).json({ msg: "Email already exists." })
         }
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
-        console.log(company);
         // If the company exists and is valid, create the employee
         const employee = new User({
             firstName,
@@ -317,5 +319,41 @@ const forgotPassword = async (req, res) => {
         return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
     }
 }
+// Get all type of roles from static
+const employeeRole = async (req, res) => {
+    try {
+        return res.status(200).json({ msg: "Employee role", employeeRoles })
+    } catch (error) {
+        return res.status(500).json({ msg: "Something went wrong" })
 
-module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword }
+    }
+}
+// Get all type of department from static
+const employeDepartments = async (req, res) => {
+    try {
+        return res.status(200).json({ msg: "Employee Department", employeDepartment })
+    } catch (error) {
+        return res.status(500).json({ msg: "Something went wrong" })
+
+    }
+}
+// Get all type of status from static file
+const employeeStatuss = async (req, res) => {
+    try {
+        return res.status(200).json({ msg: "Employee Status", employeeStatus })
+    } catch (error) {
+        return res.status(500).json({ msg: "Something went wrong" })
+
+    }
+}
+// Get all type of employee from static file
+const employeeTypes = async (req, res) => {
+    try {
+        return res.status(200).json({ msg: "Employee Type", employeeType })
+    } catch (error) {
+        return res.status(500).json({ msg: "Something went wrong" })
+
+    }
+}
+
+module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword, employeeRole, employeDepartments, employeeStatuss, employeeTypes }
