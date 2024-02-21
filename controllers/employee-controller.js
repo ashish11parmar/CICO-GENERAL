@@ -215,8 +215,8 @@ const resendOtp = async (req, res) => {
 const createEmployee = async (req, res) => {
     const companyId = req.user.id
     try {
-        const { firstName, lastName, phoneNumber, email, password } = req.body;
-        if (!firstName || !lastName || !phoneNumber || !email || !password) {
+        const { firstName, lastName, phoneNumber, email, password, gender, hiringDate, status, department, type, role } = req.body;
+        if (!firstName || !lastName || !phoneNumber || !email || !password || !gender || !hiringDate || !status || !department || !type || !role) {
             return res.status(400).json({ msg: "All field are required." })
         }
         const company = await User.find({ _id: companyId }) // Getting company details
@@ -261,7 +261,6 @@ const getEmployeesCompanyWise = async (req, res) => {
         // Payload created for the somefeild are send to client side 
         for (let i = 0; i < employees.length; i++) {
             const employee = employees[i];
-            console.log(employee);
             const employeePayload = {
                 firstName: employee.firstName,
                 lastName: employee.lastName,
@@ -271,8 +270,6 @@ const getEmployeesCompanyWise = async (req, res) => {
             };
             employePayload.push(employeePayload);
         }
-        console.log(employePayload);
-
         // If employees are found, return them
         res.status(200).json({ msg: "Employees found for the company.", data: { employees: employePayload } });
     } catch (error) {
@@ -286,7 +283,8 @@ const getSingleEmployee = async (req, res) => {
     if (!id) return res.status(400).json({ msg: "employee id is required.", });
     const employee = await User.findOne({ _id: id })
     if (!employee) return res.status(400).json({ msg: "employee not found.", });
-    return res.status(200).json({ msg: "Employee found successfully", data: { employee } })
+    employee.password = undefined;
+    return res.status(200).json({ msg: "Employee found successfully", employee })
 }
 
 
