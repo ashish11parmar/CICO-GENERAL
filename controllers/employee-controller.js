@@ -62,6 +62,7 @@ const adminLogin = async (req, res) => {
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(req.body);
         if (!email || !password) {
             return res.status(400).json({ msg: "email and password are required." })
         }
@@ -289,7 +290,7 @@ const updateEmployee = async (req, res) => {
     const employee = await User.findOne({ email: req.body.email })
     if (employee) return res.status(400).json({ msg: "Email already exists.", });
     const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
-    res.status(200).json({ updatedEmployee })
+    return res.status(200).json({ msg: "Employee updated successfully", updatedEmployee })
 }
 
 
@@ -355,5 +356,7 @@ const employeeTypes = async (req, res) => {
 
     }
 }
+
+
 
 module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword, employeeRole, employeDepartments, employeeStatuss, employeeTypes }

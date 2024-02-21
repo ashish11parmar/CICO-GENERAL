@@ -8,6 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 //_______MainRoute________//
@@ -17,3 +18,4 @@ app.use('/', indexRouter)
 app.listen(PORT, () => {
     console.log(`${PORT} is running`);
 })
+ 

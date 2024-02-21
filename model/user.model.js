@@ -5,12 +5,48 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    middleName: {
+        type: String,
+        required: true
+    },
     lastName: {
         type: String,
         required: true
     },
     companyname: {
         type: String
+    },
+    employeeID: {
+        type: String,
+        required: true,
+    },
+    birthDate: {
+        type: String,
+        required: true
+    },
+    hiringDate: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        require: true
+    },
+    department: {
+        type: String,
+        required: true
     },
     phoneNumber: {
         type: Number,
@@ -45,6 +81,9 @@ const UserSchema = new Schema({
     isVerified: {
         type: Boolean,
         default: false
+    },
+    details: {
+        type: Object
     }
 });
 UserSchema.index({ otp: 1 }, { expireAfterSeconds: 3600 });
