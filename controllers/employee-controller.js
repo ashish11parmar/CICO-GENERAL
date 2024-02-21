@@ -281,6 +281,14 @@ const getEmployeesCompanyWise = async (req, res) => {
     }
 }
 
+const getSingleEmployee = async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ msg: "employee id is required.", });
+    const employee = await User.findOne({ _id: id })
+    if (!employee) return res.status(400).json({ msg: "employee not found.", });
+    return res.status(200).json({ msg: "Employee found successfully", data: { employee } })
+}
+
 
 
 // this function will Update the employee details using id 
@@ -292,6 +300,7 @@ const updateEmployee = async (req, res) => {
     const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
     return res.status(200).json({ msg: "Employee updated successfully", updatedEmployee })
 }
+
 
 
 // This function will delete the employee using there is 
@@ -359,4 +368,4 @@ const employeeTypes = async (req, res) => {
 
 
 
-module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword, employeeRole, employeDepartments, employeeStatuss, employeeTypes }
+module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword, employeeRole, employeDepartments, employeeStatuss, employeeTypes, getSingleEmployee }

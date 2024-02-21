@@ -1,5 +1,5 @@
 const express = require('express');
-const { getEmployeesCompanyWise, updateEmployee, deleteEmployee, createEmployee, employeeRole, employeDepartments, employeeStatuss, employeeTypes } = require('../controllers/employee-controller');
+const { getEmployeesCompanyWise, updateEmployee, deleteEmployee, createEmployee, employeeRole, employeDepartments, employeeStatuss, employeeTypes, getSingleEmployee } = require('../controllers/employee-controller');
 const { verifyToken } = require('../services/verifyToken');
 const router = express.Router();
 
@@ -13,5 +13,6 @@ router.get('/roles', employeeRole)
 router.get('/department', employeDepartments)
 router.get('/status', employeeStatuss)
 router.get('/types', employeeTypes)
+router.get('/single/:id', getSingleEmployee)
 
 module.exports = router;
