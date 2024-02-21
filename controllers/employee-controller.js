@@ -219,10 +219,6 @@ const createEmployee = async (req, res) => {
         if (!firstName || !lastName || !phoneNumber || !email || !password || !gender || !hiringDate || !status || !department || !type || !role) {
             return res.status(400).json({ msg: "All field are required." })
         }
-        const company = await User.find({ _id: companyId }) // Getting company details
-        if (!company) {
-            return res.status(400).json({ msg: "Company not found." })
-        }
         const emp = await User.findOne({ email });
         if (emp) {
             return res.status(400).json({ msg: "Email already exists." })
@@ -277,7 +273,7 @@ const getEmployeesCompanyWise = async (req, res) => {
             employePayload.push(employeePayload);
         }
         // If employees are found, return them
-        res.status(200).json({ msg: "Employees found for the company.", data: { employees: employePayload } });
+        res.status(200).json({ msg: "Employees found for the company.", data: employePayload });
     } catch (error) {
         console.error("Error fetching employees:", error);
         res.status(500).json({ msg: "Internal server error" });
@@ -299,8 +295,6 @@ const getSingleEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
     const { id } = req.params;
     if (!id) return res.status(400).json({ msg: "employee id is required.", });
-    const employee = await User.findOne({ email: req.body.email })
-    if (employee) return res.status(400).json({ msg: "Email already exists.", });
     const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
     return res.status(200).json({ msg: "Employee updated successfully", updatedEmployee })
 }
