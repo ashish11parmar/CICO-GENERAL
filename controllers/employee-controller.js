@@ -234,7 +234,13 @@ const createEmployee = async (req, res) => {
             lastName,
             phoneNumber,
             email,
+            gender,
             password: newPass,
+            hiringDate,
+            status,
+            department,
+            type,
+            role,
             isCompany: false,
             isVerified: false,
             companyId: companyId // Assign the company's ObjectId to the employee's companyId field

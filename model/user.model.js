@@ -6,8 +6,7 @@ const UserSchema = new Schema({
         required: true
     },
     middleName: {
-        type: String,
-        required: true
+        type: String
     },
     lastName: {
         type: String,
@@ -17,12 +16,10 @@ const UserSchema = new Schema({
         type: String
     },
     employeeID: {
-        type: String,
-        required: true,
+        type: String
     },
     birthDate: {
         type: String,
-        required: true
     },
     hiringDate: {
         type: String,
