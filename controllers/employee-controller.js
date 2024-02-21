@@ -72,7 +72,7 @@ const userLogin = async (req, res) => {
         const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
         const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
         console.log(!userDetails.isCompany);
-        if (isPasswordCorrect !== password && !userDetails.isCompany) {
+        if (isPasswordCorrect === password || !userDetails.isCompany) {
             const token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24 hours for token expire
                 id: userDetails._id,
@@ -106,7 +106,7 @@ const adminSignup = async (req, res) => {
     try {
         const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
         if (!firstName || !lastName || !companyname || !phoneNumber || !email || !password) {
-            return res.status(400).json({ msg: "All field are required.", })
+            return res.status(400).json({ msg: "All field are required." })
         }
         const response = await User.findOne({ email: email })
         const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
@@ -151,7 +151,7 @@ const sendVerificationCode = async (email, otp) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.error("Error sending email:", error); 
+            console.error("Error sending email:", error);
         } else {
             console.log("Email sent:", info);
         }
