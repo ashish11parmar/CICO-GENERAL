@@ -9,22 +9,16 @@ const { employeeRoles, employeDepartment, employeeStatus, employeeType } = requi
 
 
 
-
-
 // This functiuon is for login and generate jwt token
 const adminLogin = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(204).json({ msg: "email and password are required" })
-        }
-        const userDetails = await User.findOne({ email: email }) // find user details using email
+        const userDetails = await User.findOne({ email: req.body.email }) // find user details using email
         if (!userDetails) {
             return res.status(404).json({ msg: "Email not found" })
         }
         const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
         const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
-        if (isPasswordCorrect !== password) {
+        if (isPasswordCorrect !== req.body.password) {
             return res.status(500).json({ msg: "Password is incorrect!" })
         }
         if (userDetails.isVerified) {
@@ -61,19 +55,13 @@ const adminLogin = async (req, res) => {
 
 const userLogin = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        console.log(req.body);
-        if (!email || !password) {
-            return res.status(400).json({ msg: "email and password are required." })
-        }
-        const userDetails = await User.findOne({ email: email }) // find user details using email
+        const userDetails = await User.findOne({ email: req.body.email }) // find user details using email
         if (!userDetails) {
             return res.status(404).json({ msg: "Email not found" })
         }
         const bytes = CryptoJS.AES.decrypt(userDetails.password, 'cico-general');
         const isPasswordCorrect = bytes.toString(CryptoJS.enc.Utf8);
-        console.log(!userDetails.isCompany);
-        if (isPasswordCorrect === password || !userDetails.isCompany) {
+        if (isPasswordCorrect === req.body.password || !userDetails.isCompany) {
             const token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24 hours for token expire
                 id: userDetails._id,
@@ -86,8 +74,9 @@ const userLogin = async (req, res) => {
 
             const userdata = {
                 token: token,
-                id: userDetails._id,
+                _id: userDetails._id,
                 user_display_name: userDetails.firstName + ' ' + userDetails.lastName,
+                firstName: userDetails.firstName,
                 phoneNumber: userDetails.phoneNumber,
                 user_email: userDetails.email,
                 isVerified: userDetails.isVerified
@@ -97,7 +86,7 @@ const userLogin = async (req, res) => {
             return res.status(500).json({ msg: "Something went wrong" })
         }
     } catch (error) {
-        return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
+        return res.status(500).json({ msg: "Something went wrong", data: error })
     }
 }
 
@@ -105,12 +94,8 @@ const userLogin = async (req, res) => {
 // This funcxtion will register new emoployee or signup with new company 
 const adminSignup = async (req, res) => {
     try {
-        const { firstName, lastName, companyname, phoneNumber, email, password } = req.body;
-        if (!firstName || !lastName || !companyname || !phoneNumber || !email || !password) {
-            return res.status(400).json({ msg: "All field are required." })
-        }
-        const response = await User.findOne({ email: email })
-        const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
+        const response = await User.findOne({ email: req.body.email })
+        const newPass = CryptoJS.AES.encrypt(req.body.password, 'cico-general');
         req.body.password = newPass;
         const otp = Math.floor(1000 + Math.random() * 9000);
         const expire = Date.now() + 600 * 1000; // 10 minute from now
@@ -126,9 +111,7 @@ const adminSignup = async (req, res) => {
         return res.status(500).json({ msg: "Internal Server Error..." })
 
     }
-
 }
-
 
 const sendVerificationCode = async (email, otp) => {
     const emailTemplateSource = fs.readFileSync(path.join(__dirname, "../views/verification.hbs"), "utf8")
@@ -215,35 +198,16 @@ const resendOtp = async (req, res) => {
 const createEmployee = async (req, res) => {
     const companyId = req.user.id
     try {
-        const { firstName, lastName, phoneNumber, email, password, gender, hiringDate, status, department, type, role } = req.body;
-        if (!firstName || !lastName || !phoneNumber || !email || !password || !gender || !hiringDate || !status || !department || !type || !role) {
-            return res.status(400).json({ msg: "All field are required." })
-        }
-        const emp = await User.findOne({ email });
-        if (emp) {
-            return res.status(400).json({ msg: "Email already exists." })
-        }
-        const newPass = CryptoJS.AES.encrypt(password, 'cico-general');
-        // If the company exists and is valid, create the employee
-        const employee = new User({
-            firstName,
-            lastName,
-            phoneNumber,
-            email,
-            gender,
-            password: newPass,
-            hiringDate,
-            status,
-            department,
-            type,
-            role,
-            isCompany: false,
-            isVerified: false,
-            companyId: companyId // Assign the company's ObjectId to the employee's companyId field
-        });
+        const emp = await User.findOne({ email: req.body.email }); // Find user already exist or not 
+        if (emp) { return res.status(400).json({ msg: "Email already exists." }) }
+        const newPass = CryptoJS.AES.encrypt(req.body.password, 'cico-general');
+        req.body.password = newPass;
+        req.body.isCompany = false;
+        req.body.isVerified = false;
+        req.body.companyId = companyId; // Assign the company's ObjectId to the employee's companyId field
+        const employee = new User(req.body);
         await employee.save();
         res.status(201).json({ msg: "employee added succesfully" });
-
     } catch (error) {
         console.error("Error creating employee:", error);
         res.status(500).json({ msg: "Internal server error" });
@@ -256,7 +220,7 @@ const getEmployeesCompanyWise = async (req, res) => {
     try {
         // Retrieve all employees for the found company
         const employees = await User.find({ companyId: companyId });
-        if (!employees || employees.length === 0) {
+        if (!employees.length) {
             return res.status(404).json({ msg: "No employees found for this company." });
         }
         let employePayload = [];
@@ -281,22 +245,26 @@ const getEmployeesCompanyWise = async (req, res) => {
 }
 
 const getSingleEmployee = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ msg: "employee id is required.", });
-    const employee = await User.findOne({ _id: id })
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required.", });
+    const employee = await User.findOne({ _id: _id })
     if (!employee) return res.status(400).json({ msg: "employee not found.", });
     employee.password = undefined;
-    return res.status(200).json({ msg: "Employee found successfully", employee })
+    return res.status(200).json({ msg: "Employee found successfully", data: employee })
 }
 
 
 
 // this function will Update the employee details using id 
 const updateEmployee = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ msg: "employee id is required.", });
-    const updatedEmployee = await User.findByIdAndUpdate(id, req.body, { new: true })
-    return res.status(200).json({ msg: "Employee updated successfully", updatedEmployee })
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required.", });
+    const updatedEmployee = await User.findByIdAndUpdate(_id, req.body, { new: true })
+    if (updateEmployee) {
+        return res.status(200).json({ msg: "Employee updated successfully" })
+    } else {
+        return res.status(400).json({ msg: "Employee not found." })
+    }
 }
 
 
