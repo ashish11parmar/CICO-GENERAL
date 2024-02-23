@@ -49,7 +49,7 @@ const adminLogin = async (req, res) => {
             return res.status(201).json({ msg: "Otp sent to your email" })
         }
     } catch (error) {
-        return res.status(500).json({ msg: "Something went wrong", data: { err: error } })
+        return res.status(500).json({ msg: "Something went wrong", data: error })
     }
 }
 
@@ -106,9 +106,9 @@ const adminSignup = async (req, res) => {
         const user = new User(req.body);
         await user.save();
         res.status(201).json({ msg: "user registered succesfully" });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ msg: "Internal Server Error..." })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: "Internal Server Error...", data: error })
 
     }
 }
@@ -165,7 +165,7 @@ const verifyOTP = async (req, res) => {
         return res.status(200).json({ msg: "Email verified successfully." });
     } catch (error) {
         console.error("Error verifying OTP:", error);
-        return res.status(500).json({ msg: "Internal Server Error." });
+        return res.status(500).json({ msg: "Internal Server Error.", data: error });
     }
 }
 
@@ -190,7 +190,7 @@ const resendOtp = async (req, res) => {
         return res.status(200).json({ message: "OTP resent successfully." });
     } catch (error) {
         console.error("Error resending OTP:", error);
-        return res.status(500).json({ message: "Internal Server Error." });
+        return res.status(500).json({ message: "Internal Server Error.", data: error });
     }
 }
 
@@ -210,7 +210,7 @@ const createEmployee = async (req, res) => {
         res.status(201).json({ msg: "employee added succesfully" });
     } catch (error) {
         console.error("Error creating employee:", error);
-        res.status(500).json({ msg: "Internal server error" });
+        res.status(500).json({ msg: "Internal server error", data: error });
     }
 }
 
@@ -240,7 +240,7 @@ const getEmployeesCompanyWise = async (req, res) => {
         res.status(200).json({ msg: "Employees found for the company.", data: employePayload });
     } catch (error) {
         console.error("Error fetching employees:", error);
-        res.status(500).json({ msg: "Internal server error" });
+        res.status(500).json({ msg: "Internal server error", data: error });
     }
 }
 
