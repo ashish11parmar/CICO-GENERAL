@@ -4,7 +4,8 @@ const { verifyToken } = require('../services/verifyToken');
 const { validateCreateEmp } = require('../validation/validate-Controller');
 const { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType,
     createEmployeeRole,
-    getEmployeeRoles
+    getEmployeeRoles,
+    allHrmsType
 } = require('../controllers/hrms-controller');
 const router = express.Router();
 
@@ -32,6 +33,8 @@ router.delete('/types/:id', deleteEmployeeType)
 router.post('/roles', createEmployeeRole)
 router.get('/roles', getEmployeeRoles)
 
+//_____________Employee HRMS All__________________
+router.get('/hrms', allHrmsType)
 
 
 module.exports = router;

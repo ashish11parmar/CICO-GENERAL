@@ -1,4 +1,4 @@
-const { Designation, Types, Roles} = require('../model/hrms.model');
+const { Designation, Types, Roles } = require('../model/hrms.model');
 
 //_____________Employee Designation_________________
 const getDesignations = async (req, res) => {
@@ -89,7 +89,7 @@ const deleteEmployeeType = async (req, res) => {
 
 //________________Employee Role_______________________
 
-const createEmployeeRole = async (req, res)=>{
+const createEmployeeRole = async (req, res) => {
     try {
         const empRole = await Roles.findOne({ title: req.body.title })
         if (empRole) {
@@ -99,19 +99,33 @@ const createEmployeeRole = async (req, res)=>{
             await roles.save();
             res.status(201).json({ msg: "employee roles added successfully.", data: roles });
         }
-    }catch (e){
-        res.status(500).json({msg: e.message})
+    } catch (e) {
+        res.status(500).json({ msg: e.message })
     }
 }
-const getEmployeeRoles = async (req, res)=>{
+const getEmployeeRoles = async (req, res) => {
     try {
         const roles = await Roles.find();
         res.status(200).json(roles);
-    }catch (e){
-        res.status(500).json({msg: e.message})
+    } catch (e) {
+        res.status(500).json({ msg: e.message })
+    }
+}
+
+
+//_____________All HRMS Module in signle api___________________
+
+const allHrmsType = async (req, res) => {
+    try {
+        const designations = await Designation.find();
+        const types = await Types.find();
+        const role = await Roles.find();
+        res.status(200).json({ msg: "All HRMS DATA", data: { designations, types, role } });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 }
 
 
 
-module.exports = { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType, createEmployeeRole, getEmployeeRoles }
+module.exports = { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType, createEmployeeRole, getEmployeeRoles, allHrmsType }
