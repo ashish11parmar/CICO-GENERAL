@@ -224,14 +224,18 @@ const getEmployeesCompanyWise = async (req, res) => {
             return res.status(404).json({ msg: "No employees found for this company." });
         }
         let employePayload = [];
-        // Payload created for the somefeild are send to client side 
+        // Payload created for the somefeild are send to client side
         for (let i = 0; i < employees.length; i++) {
             const employee = employees[i];
             const employeePayload = {
+                display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
                 phoneNumber: employee.phoneNumber,
+                department: employee.department,
+                type: employee.type,
                 email: employee.email,
+                employeeID: employee.employeeID,
                 _id: employee._id
             };
             employePayload.push(employeePayload);

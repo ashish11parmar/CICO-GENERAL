@@ -2,7 +2,10 @@ const express = require('express');
 const { getEmployeesCompanyWise, updateEmployee, deleteEmployee, createEmployee, employeeRole, employeeStatuss, employeeTypes, getSingleEmployee } = require('../controllers/employee-controller');
 const { verifyToken } = require('../services/verifyToken');
 const { validateCreateEmp } = require('../validation/validate-Controller');
-const { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType } = require('../controllers/hrms-controller');
+const { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType,
+    createEmployeeRole,
+    getEmployeeRoles
+} = require('../controllers/hrms-controller');
 const router = express.Router();
 
 
@@ -24,6 +27,10 @@ router.get('/types', getEmployeeTypes)
 router.post('/types', createEmployeeType)
 router.put('/types/:id', updateEmployeeType)
 router.delete('/types/:id', deleteEmployeeType)
+
+// ____________Employee Role______________________
+router.post('/roles', createEmployeeRole)
+router.get('/roles', getEmployeeRoles)
 
 
 

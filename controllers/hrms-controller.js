@@ -1,4 +1,4 @@
-const { Designation, Types } = require('../model/hrms.model');
+const { Designation, Types, Roles} = require('../model/hrms.model');
 
 //_____________Employee Designation_________________
 const getDesignations = async (req, res) => {
@@ -87,6 +87,31 @@ const deleteEmployeeType = async (req, res) => {
     }
 }
 
+//________________Employee Role_______________________
+
+const createEmployeeRole = async (req, res)=>{
+    try {
+        const empRole = await Roles.findOne({ title: req.body.title })
+        if (empRole) {
+            return res.status(400).json({ message: "employee types already exists" })
+        } else {
+            const roles = new Roles(req.body);
+            await roles.save();
+            res.status(201).json({ msg: "employee roles added successfully.", data: roles });
+        }
+    }catch (e){
+        res.status(500).json({msg: e.message})
+    }
+}
+const getEmployeeRoles = async (req, res)=>{
+    try {
+        const roles = await Roles.find();
+        res.status(200).json(roles);
+    }catch (e){
+        res.status(500).json({msg: e.message})
+    }
+}
 
 
-module.exports = { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType }
+
+module.exports = { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType, createEmployeeRole, getEmployeeRoles }

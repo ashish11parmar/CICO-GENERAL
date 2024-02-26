@@ -30,6 +30,22 @@ const typeSchema = new Schema({
         default: '',
     }
 })
+
+const rolesSchema = new Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    total_employee: {
+        type: Number,
+        default: 0,
+    },
+    description: {
+        type: String,
+        default: '',
+    }
+})
 const Designation = mongoose.model('designation', designationSchema);
 const Types = mongoose.model('type', typeSchema);
-module.exports = { Designation, Types };
+const Roles = mongoose.model('role', rolesSchema);
+module.exports = { Designation, Types, Roles };
