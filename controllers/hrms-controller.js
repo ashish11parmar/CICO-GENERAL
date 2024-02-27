@@ -1,7 +1,9 @@
 const { Designation, Types, Roles } = require('../model/hrms.model');
 
+const hrmsController = {};
+
 //_____________Employee Designation_________________
-const getDesignations = async (req, res) => {
+hrmsController.getDesignations = async (req, res) => {
     try {
         const designations = await Designation.find();
         res.status(200).json(designations);
@@ -10,7 +12,7 @@ const getDesignations = async (req, res) => {
     }
 }
 
-const createDesignation = async (req, res) => {
+hrmsController.createDesignation = async (req, res) => {
     try {
         const designation = await Designation.findOne({ title: req.body.title })
         if (designation) {
@@ -26,7 +28,7 @@ const createDesignation = async (req, res) => {
     }
 }
 
-const updateDesignation = async (req, res) => {
+hrmsController.updateDesignation = async (req, res) => {
     try {
         const designation = await Designation.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json({ msg: "Designation updated.", data: designation });
@@ -35,7 +37,7 @@ const updateDesignation = async (req, res) => {
     }
 }
 
-const deleteDesignation = async (req, res) => {
+hrmsController.deleteDesignation = async (req, res) => {
     try {
         const designation = await Designation.findByIdAndDelete(req.params.id);
         res.status(200).json({ msg: "Designation deleted.", data: designation });
@@ -45,7 +47,7 @@ const deleteDesignation = async (req, res) => {
 }
 
 //_____________Employee Type________________________
-const getEmployeeTypes = async (req, res) => {
+hrmsController.getEmployeeTypes = async (req, res) => {
     try {
         const types = await Types.find();
         res.status(200).json(types);
@@ -53,7 +55,7 @@ const getEmployeeTypes = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-const createEmployeeType = async (req, res) => {
+hrmsController.createEmployeeType = async (req, res) => {
     try {
         const empType = await Types.findOne({ title: req.body.title })
         if (empType) {
@@ -68,7 +70,7 @@ const createEmployeeType = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-const updateEmployeeType = async (req, res) => {
+hrmsController.updateEmployeeType = async (req, res) => {
     try {
         const types = await Types.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json({ msg: "employee types updated.", data: types });
@@ -77,7 +79,7 @@ const updateEmployeeType = async (req, res) => {
     }
 
 }
-const deleteEmployeeType = async (req, res) => {
+hrmsController.deleteEmployeeType = async (req, res) => {
     try {
         const types = await Types.findByIdAndDelete(req.params.id);
         res.status(200).json({ msg: "employee types deleted.", data: types });
@@ -89,7 +91,7 @@ const deleteEmployeeType = async (req, res) => {
 
 //________________Employee Role_______________________
 
-const createEmployeeRole = async (req, res) => {
+hrmsController.createEmployeeRole = async (req, res) => {
     try {
         const empRole = await Roles.findOne({ title: req.body.title })
         if (empRole) {
@@ -103,7 +105,7 @@ const createEmployeeRole = async (req, res) => {
         res.status(500).json({ msg: e.message })
     }
 }
-const getEmployeeRoles = async (req, res) => {
+hrmsController.getEmployeeRoles = async (req, res) => {
     try {
         const roles = await Roles.find();
         res.status(200).json(roles);
@@ -115,7 +117,7 @@ const getEmployeeRoles = async (req, res) => {
 
 //_____________All HRMS Module in signle api___________________
 
-const allHrmsType = async (req, res) => {
+hrmsController.allHrmsType = async (req, res) => {
     try {
         const designations = await Designation.find();
         const types = await Types.find();
@@ -128,4 +130,4 @@ const allHrmsType = async (req, res) => {
 
 
 
-module.exports = { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType, createEmployeeRole, getEmployeeRoles, allHrmsType }
+module.exports = hrmsController;

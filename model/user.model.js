@@ -70,7 +70,14 @@ const UserSchema = new Schema({
     },
     details: {
         type: Object
-    }
+    },
+    education: [{
+        _id: { type: String, unique: true, required: true },
+        details: Object,
+    }],
+    workExperience: [{
+        type: Object,
+    }]
 });
 UserSchema.index({ otp: 1 }, { expireAfterSeconds: 3600 });
 const User = mongoose.model('user', UserSchema);

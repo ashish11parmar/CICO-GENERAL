@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const ObjectId = require('mongodb').ObjectId;
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
 const CryptoJS = require('crypto-js');
@@ -6,10 +7,11 @@ const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
 
-
+const userController = {}
 
 // This functiuon is for login and generate jwt token
-const adminLogin = async (req, res) => {
+userController.adminLogin = async (req, res) => {
+    console.log(req.body);
     try {
         const userDetails = await User.findOne({ email: req.body.email }) // find user details using email
         if (!userDetails) {
@@ -52,7 +54,7 @@ const adminLogin = async (req, res) => {
     }
 }
 
-const userLogin = async (req, res) => {
+userController.userLogin = async (req, res) => {
     try {
         const userDetails = await User.findOne({ email: req.body.email }) // find user details using email
         if (!userDetails) {
@@ -91,7 +93,7 @@ const userLogin = async (req, res) => {
 
 
 // This funcxtion will register new emoployee or signup with new company 
-const adminSignup = async (req, res) => {
+userController.adminSignup = async (req, res) => {
     try {
         const response = await User.findOne({ email: req.body.email })
         const newPass = CryptoJS.AES.encrypt(req.body.password, 'cico-general');
@@ -112,7 +114,7 @@ const adminSignup = async (req, res) => {
     }
 }
 
-const sendVerificationCode = async (email, otp) => {
+userController.sendVerificationCode = async (email, otp) => {
     const emailTemplateSource = fs.readFileSync(path.join(__dirname, "../views/verification.hbs"), "utf8")
     const otpTemplate = handlebars.compile(emailTemplateSource)
     const htmlToSend = otpTemplate({ otp })
@@ -141,7 +143,7 @@ const sendVerificationCode = async (email, otp) => {
     });
 }
 
-const verifyOTP = async (req, res) => {
+userController.verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
         if (!email || !otp) {
@@ -168,7 +170,7 @@ const verifyOTP = async (req, res) => {
     }
 }
 
-const resendOtp = async (req, res) => {
+userController.resendOtp = async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
@@ -194,7 +196,7 @@ const resendOtp = async (req, res) => {
 }
 
 // This function will create new employee company wise 
-const createEmployee = async (req, res) => {
+userController.createEmployee = async (req, res) => {
     const companyId = req.user.id
     try {
         const emp = await User.findOne({ email: req.body.email }); // Find user already exist or not 
@@ -214,7 +216,7 @@ const createEmployee = async (req, res) => {
 }
 
 // get all user from database
-const getEmployeesCompanyWise = async (req, res) => {
+userController.getEmployeesCompanyWise = async (req, res) => {
     const companyId = req.user.id
     try {
         // Retrieve all employees for the found company
@@ -247,7 +249,7 @@ const getEmployeesCompanyWise = async (req, res) => {
     }
 }
 
-const getSingleEmployee = async (req, res) => {
+userController.getSingleEmployee = async (req, res) => {
     const _id = req.params.id;
     if (!_id) return res.status(400).json({ msg: "employee id is required.", });
     const employee = await User.findOne({ _id: _id })
@@ -259,11 +261,11 @@ const getSingleEmployee = async (req, res) => {
 
 
 // this function will Update the employee details using id 
-const updateEmployee = async (req, res) => {
+userController.updateEmployee = async (req, res) => {
     const _id = req.params.id;
     if (!_id) return res.status(400).json({ msg: "employee id is required.", });
     const updatedEmployee = await User.findByIdAndUpdate(_id, req.body, { new: true })
-    if (updateEmployee) {
+    if (updatedEmployee) {
         return res.status(200).json({ msg: "Employee updated successfully" })
     } else {
         return res.status(400).json({ msg: "Employee not found." })
@@ -273,7 +275,7 @@ const updateEmployee = async (req, res) => {
 
 
 // This function will delete the employee using there is 
-const deleteEmployee = async (req, res) => {
+userController.deleteEmployee = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     if (!id) return res.status(400).json({ msg: "employee id is required.", });
@@ -282,7 +284,7 @@ const deleteEmployee = async (req, res) => {
     res.status(200).json({ msg: "employee deleted successfully" });
 }
 
-const forgotPassword = async (req, res) => {
+userController.forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
@@ -300,5 +302,103 @@ const forgotPassword = async (req, res) => {
 }
 
 
+//________Employee Work-Exp And Education-Info__________
 
-module.exports = { adminLogin, userLogin, verifyOTP, adminSignup, createEmployee, getEmployeesCompanyWise, updateEmployee, deleteEmployee, resendOtp, forgotPassword, getSingleEmployee }
+userController.createWorkExp = async (req, res) => {
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required.", });
+    const employee = await User.findById(_id)
+    req.body.id = req.body.company_name + '_' + (Math.floor(Math.random() * 900) + 100)
+    employee.workExperience.push(req.body)
+    await employee.save();
+    if (employee) {
+        return res.status(200).json({ msg: "Employee work experience added successfully", data: employee.workExperience })
+    } else {
+        return res.status(400).json({ msg: "Employee not found." })
+    }
+}
+
+userController.getWorkExp = async (req, res) => {
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required.", });
+    const employee = await User.findById(_id)
+    if (employee) {
+        return res.status(200).json({ msg: "Employee work experience found successfully", data: employee.workExperience })
+    } else {
+        return res.status(400).json({ msg: "Employee not found." })
+    }
+}
+userController.deleteWorkExp = async (req, res) => {
+    const _id = req.params.id;
+    const oid = req.params.oid;
+    if (!_id) {
+        return res.status(400).json({ msg: "Employee id is required." });
+    }
+    try {
+        const employee = await User.findById(_id);
+        if (!employee) {
+            return res.status(400).json({ msg: "Employee not found." });
+        }
+        const index = employee.workExperience.findIndex(exp => exp.id === oid);
+        if (index === -1) {
+            return res.status(400).json({ msg: "Work experience not found." });
+        }
+        employee.workExperience.splice(index, 1);
+        await employee.save();
+        return res.status(200).json({ msg: "Employee work experience deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ msg: "Internal server error." });
+    }
+
+}
+
+userController.createEducation = async (req, res) => {
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required." });
+    const employee = await User.findById(_id)
+    // // req.body.id = req.body.school + '_' + (Math.floor(Math.random() * 900) + 100
+    // req.body.id = new ObjectId();
+    employee.education.push(req.body)
+    await employee.save();
+    if (employee) {
+        return res.status(200).json({ msg: "Employee education added successfully" })
+    } else {
+        return res.status(400).json({ msg: "Employee not found." })
+    }
+}
+
+userController.getEducation = async (req, res) => {
+    const _id = req.params.id;
+    if (!_id) return res.status(400).json({ msg: "employee id is required.", });
+    const employee = await User.findById(_id)
+    if (employee) {
+        return res.status(200).json({ msg: "Employee education found successfully", data: employee.education })
+    } else {
+        return res.status(400).json({ msg: "Employee not found." })
+    }
+}
+userController.deleteEducation = async (req, res) => {
+    const _id = req.params.id;
+    const oid = req.params.oid;
+    if (!_id) {
+        return res.status(400).json({ msg: "Employee id is required." });
+    }
+    try {
+        const employee = await User.findById(_id);
+        if (!employee) {
+            return res.status(400).json({ msg: "Employee not found." });
+        }
+        const index = employee.education.findIndex(exp => exp.id === oid);
+        if (index === -1) {
+            return res.status(400).json({ msg: "Education not found." });
+        }
+        employee.education.splice(index, 1);
+        await employee.save();
+        return res.status(200).json({ msg: "Employee education deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ msg: "Internal server error." });
+    }
+
+}
+
+module.exports = userController;

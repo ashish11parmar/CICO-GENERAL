@@ -1,40 +1,48 @@
 const express = require('express');
-const { getEmployeesCompanyWise, updateEmployee, deleteEmployee, createEmployee, employeeRole, employeeStatuss, employeeTypes, getSingleEmployee } = require('../controllers/employee-controller');
 const { verifyToken } = require('../services/verifyToken');
 const { validateCreateEmp } = require('../validation/validate-Controller');
-const { createDesignation, getDesignations, updateDesignation, deleteDesignation, getEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType,
-    createEmployeeRole,
-    getEmployeeRoles,
-    allHrmsType
-} = require('../controllers/hrms-controller');
+const userController = require('../controllers/employee-controller');
+const hrmsController = require('../controllers/hrms-controller');
 const router = express.Router();
 
 
 // Routes for crud for register user 
-router.post('/', validateCreateEmp, verifyToken, createEmployee)
-router.get('/all', verifyToken, getEmployeesCompanyWise)
-router.put('/:id', verifyToken, updateEmployee)
-router.delete('/:id', verifyToken, deleteEmployee)
-router.get('/single/:id', verifyToken, getSingleEmployee)
+router.post('/', validateCreateEmp, verifyToken, userController.createEmployee)
+router.get('/all', verifyToken, userController.getEmployeesCompanyWise)
+router.put('/:id', verifyToken, userController.updateEmployee)
+router.delete('/:id', verifyToken, userController.deleteEmployee)
+router.get('/single/:id', verifyToken, userController.getSingleEmployee)
 
 //_____________Employee Designation_________________
-router.post('/designation', createDesignation)
-router.get('/designation', getDesignations)
-router.put('/designation/:id', updateDesignation)
-router.delete('/designation/:id', deleteDesignation)
+router.post('/designation', hrmsController.createDesignation)
+router.get('/designation', hrmsController.getDesignations)
+router.put('/designation/:id', hrmsController.updateDesignation)
+router.delete('/designation/:id', hrmsController.deleteDesignation)
 
 //_____________Employee Type______________________
-router.get('/types', getEmployeeTypes)
-router.post('/types', createEmployeeType)
-router.put('/types/:id', updateEmployeeType)
-router.delete('/types/:id', deleteEmployeeType)
+router.get('/types', hrmsController.getEmployeeTypes)
+router.post('/types', hrmsController.createEmployeeType)
+router.put('/types/:id', hrmsController.updateEmployeeType)
+router.delete('/types/:id', hrmsController.deleteEmployeeType)
 
 // ____________Employee Role______________________
-router.post('/roles', createEmployeeRole)
-router.get('/roles', getEmployeeRoles)
+router.post('/roles', hrmsController.createEmployeeRole)
+router.get('/roles', hrmsController.getEmployeeRoles)
 
 //_____________Employee HRMS All__________________
-router.get('/hrms', allHrmsType)
+router.get('/hrms', hrmsController.allHrmsType)
+
+//_____________Employee Work-Exp__________________
+router.post('/:id/workexp', verifyToken, userController.createWorkExp)
+router.get('/:id/workexp', verifyToken, userController.getWorkExp)
+router.delete('/:id/workexp/:oid', verifyToken, userController.deleteWorkExp)
+
+
+//_____________Employee Education_________________
+router.post('/:id/eduation', verifyToken, userController.createEducation)
+router.get('/:id/eduation', verifyToken, userController.getEducation)
+router.delete('/:id/eduation/:oid', verifyToken, userController.deleteEducation)
+
 
 
 module.exports = router;
