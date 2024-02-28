@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const designationSchema = new Schema({
+const departmentSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -13,7 +13,11 @@ const designationSchema = new Schema({
     description: {
         type: String,
         default: '',
-    }
+    },
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
 })
 
 const typeSchema = new Schema({
@@ -28,7 +32,11 @@ const typeSchema = new Schema({
     description: {
         type: String,
         default: '',
-    }
+    },
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
 })
 
 const rolesSchema = new Schema({
@@ -43,9 +51,13 @@ const rolesSchema = new Schema({
     description: {
         type: String,
         default: '',
-    }
+    },
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
 })
-const Designation = mongoose.model('designation', designationSchema);
+const Department = mongoose.model('department', departmentSchema);
 const Types = mongoose.model('type', typeSchema);
 const Roles = mongoose.model('role', rolesSchema);
-module.exports = { Designation, Types, Roles };
+module.exports = { Department, Types, Roles };

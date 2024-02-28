@@ -29,13 +29,13 @@ const UserSchema = new Schema({
         type: String,
     },
     type: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'type'
     },
     role: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'role'
     },
     department: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'department'
     },
     phoneNumber: {
         type: Number,
@@ -71,9 +71,8 @@ const UserSchema = new Schema({
     details: {
         type: Object
     },
-    education: [{
-        _id: { type: String, unique: true, required: true },
-        details: Object,
+    education: [{ 
+        type: Object,
     }],
     workExperience: [{
         type: Object,

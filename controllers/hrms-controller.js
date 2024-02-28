@@ -1,11 +1,11 @@
-const { Designation, Types, Roles } = require('../model/hrms.model');
+const { Department, Types, Roles } = require('../model/hrms.model');
 
 const hrmsController = {};
 
 //_____________Employee Designation_________________
 hrmsController.getDesignations = async (req, res) => {
     try {
-        const designations = await Designation.find();
+        const designations = await Department.find();
         res.status(200).json(designations);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,12 +13,14 @@ hrmsController.getDesignations = async (req, res) => {
 }
 
 hrmsController.createDesignation = async (req, res) => {
+    const companyId = req.user.id
     try {
-        const designation = await Designation.findOne({ title: req.body.title })
+        const designation = await Department.findOne({ title: req.body.title })
         if (designation) {
             return res.status(400).json({ message: "Designation already exists" })
         } else {
-            const designation = new Designation(req.body);
+            req.body.companyId = companyId;
+            const designation = new Department(req.body);
             await designation.save();
             res.status(201).json({ msg: "designation added successfully.", data: designation });
         }
@@ -30,7 +32,7 @@ hrmsController.createDesignation = async (req, res) => {
 
 hrmsController.updateDesignation = async (req, res) => {
     try {
-        const designation = await Designation.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const designation = await Department.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json({ msg: "Designation updated.", data: designation });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -39,7 +41,7 @@ hrmsController.updateDesignation = async (req, res) => {
 
 hrmsController.deleteDesignation = async (req, res) => {
     try {
-        const designation = await Designation.findByIdAndDelete(req.params.id);
+        const designation = await Department.findByIdAndDelete(req.params.id);
         res.status(200).json({ msg: "Designation deleted.", data: designation });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -56,11 +58,13 @@ hrmsController.getEmployeeTypes = async (req, res) => {
     }
 }
 hrmsController.createEmployeeType = async (req, res) => {
+    const companyId = req.user.id
     try {
         const empType = await Types.findOne({ title: req.body.title })
         if (empType) {
             return res.status(400).json({ message: "employee types already exists" })
         } else {
+            req.body.companyId = companyId
             const types = new Types(req.body);
             await types.save();
             res.status(201).json({ msg: "employee types added successfully.", data: types });
@@ -92,11 +96,13 @@ hrmsController.deleteEmployeeType = async (req, res) => {
 //________________Employee Role_______________________
 
 hrmsController.createEmployeeRole = async (req, res) => {
+    const companyId = req.user.id
     try {
         const empRole = await Roles.findOne({ title: req.body.title })
         if (empRole) {
             return res.status(400).json({ message: "employee types already exists" })
         } else {
+            req.body.companyId = companyId;
             const roles = new Roles(req.body);
             await roles.save();
             res.status(201).json({ msg: "employee roles added successfully.", data: roles });

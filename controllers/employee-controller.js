@@ -6,6 +6,7 @@ const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
+const { Department } = require('../model/hrms.model');
 
 const userController = {}
 
@@ -224,25 +225,48 @@ userController.getEmployeesCompanyWise = async (req, res) => {
         if (!employees.length) {
             return res.status(404).json({ msg: "No employees found for this company." });
         }
-        let employePayload = [];
-        // Payload created for the somefeild are send to client side
-        for (let i = 0; i < employees.length; i++) {
-            const employee = employees[i];
-            const employeePayload = {
-                display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
-                phoneNumber: employee.phoneNumber,
-                department: employee.department,
-                type: employee.type,
-                email: employee.email,
-                employeeID: employee.employeeID,
-                _id: employee._id
-            };
-            employePayload.push(employeePayload);
-        }
-        // If employees are found, return them
-        res.status(200).json({ msg: "Employees found for the company.", data: employePayload });
+
+        User.find({ companyId: companyId })
+            .populate('companyId')
+            .populate('department', 'title')
+            .populate('role', 'title')
+            .populate('type', 'title')
+            .exec((err, employees) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                if (!employees.length) {
+                    return res.status(404).json({ msg: "No employees found for this company." });
+                }
+                const employeePayload = employees.map(employee => ({
+                    display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
+                    firstName: employee.firstName,
+                    lastName: employee.lastName,
+                    phoneNumber: employee.phoneNumber,
+                    department: employee.department ? employee.department.title : null,
+                    type: employee.type ? employee.type.title : null,
+                    role: employee.role ? employee.role.title : null,
+                    email: employee.email,
+                    employeeID: employee.employeeID,
+                    _id: employee._id
+                }));
+
+
+                // const employeePayload = employees.map(employee => ({
+                //     display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
+                //     firstName: employee.firstName,
+                //     lastName: employee.lastName,
+                //     phoneNumber: employee.phoneNumber,
+                //     departments: employee.department.map(dept => dept.title),
+                //     types: employee.type.map(empType => empType.title),
+                //     roles: employee.role.map(empRole => empRole.title),
+                //     email: employee.email,
+                //     employeeID: employee.employeeID,
+                //     _id: employee._id
+                // }));
+
+                res.status(200).json({ msg: "Employees found for the company.", data: employeePayload });
+            });
     } catch (error) {
         console.error("Error fetching employees:", error);
         res.status(500).json({ msg: "Internal server error", data: error });
@@ -308,7 +332,7 @@ userController.createWorkExp = async (req, res) => {
     const _id = req.params.id;
     if (!_id) return res.status(400).json({ msg: "employee id is required.", });
     const employee = await User.findById(_id)
-    req.body.id = req.body.company_name + '_' + (Math.floor(Math.random() * 900) + 100)
+    req.body._id = new ObjectId();
     employee.workExperience.push(req.body)
     await employee.save();
     if (employee) {
@@ -328,36 +352,13 @@ userController.getWorkExp = async (req, res) => {
         return res.status(400).json({ msg: "Employee not found." })
     }
 }
-userController.deleteWorkExp = async (req, res) => {
-    const _id = req.params.id;
-    const oid = req.params.oid;
-    if (!_id) {
-        return res.status(400).json({ msg: "Employee id is required." });
-    }
-    try {
-        const employee = await User.findById(_id);
-        if (!employee) {
-            return res.status(400).json({ msg: "Employee not found." });
-        }
-        const index = employee.workExperience.findIndex(exp => exp.id === oid);
-        if (index === -1) {
-            return res.status(400).json({ msg: "Work experience not found." });
-        }
-        employee.workExperience.splice(index, 1);
-        await employee.save();
-        return res.status(200).json({ msg: "Employee work experience deleted successfully" });
-    } catch (error) {
-        return res.status(500).json({ msg: "Internal server error." });
-    }
 
-}
 
 userController.createEducation = async (req, res) => {
     const _id = req.params.id;
     if (!_id) return res.status(400).json({ msg: "employee id is required." });
     const employee = await User.findById(_id)
-    // // req.body.id = req.body.school + '_' + (Math.floor(Math.random() * 900) + 100
-    // req.body.id = new ObjectId();
+    req.body._id = new ObjectId();
     employee.education.push(req.body)
     await employee.save();
     if (employee) {
@@ -376,29 +377,6 @@ userController.getEducation = async (req, res) => {
     } else {
         return res.status(400).json({ msg: "Employee not found." })
     }
-}
-userController.deleteEducation = async (req, res) => {
-    const _id = req.params.id;
-    const oid = req.params.oid;
-    if (!_id) {
-        return res.status(400).json({ msg: "Employee id is required." });
-    }
-    try {
-        const employee = await User.findById(_id);
-        if (!employee) {
-            return res.status(400).json({ msg: "Employee not found." });
-        }
-        const index = employee.education.findIndex(exp => exp.id === oid);
-        if (index === -1) {
-            return res.status(400).json({ msg: "Education not found." });
-        }
-        employee.education.splice(index, 1);
-        await employee.save();
-        return res.status(200).json({ msg: "Employee education deleted successfully" });
-    } catch (error) {
-        return res.status(500).json({ msg: "Internal server error." });
-    }
-
 }
 
 module.exports = userController;
