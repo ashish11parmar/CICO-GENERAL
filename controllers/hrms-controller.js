@@ -1,5 +1,5 @@
 const { Department, Types, Roles } = require('../model/hrms.model');
-
+const Holiday = require('../model/holiday.model');
 const hrmsController = {};
 
 //_____________Employee Designation_________________
@@ -131,6 +131,57 @@ hrmsController.allHrmsType = async (req, res) => {
         res.status(200).json({ msg: "All HRMS DATA", data: { designations, types, role } });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+hrmsController.createHoliday = async (req, res) => {
+    const companyId = req.user.id
+    try {
+        req.body.companyId = companyId
+        const holiday = new Holiday(req.body)
+        await holiday.save();
+        return res.status(200).json({ msg: 'Holiday added successfully', data: holiday })
+    } catch (error) {
+        return res.status(500).json({ msg: 'Internal server error', data: error })
+    }
+}
+
+hrmsController.getAllHoliday = async (req, res) => {
+    const companyId = req.user.id
+    try {
+        const companywiseHoliday = await Holiday.find({ companyId: companyId });
+        if (!companywiseHoliday.length) {
+            return res.status(200).json({ msg: "No Holiday found for this company." });
+        }
+
+        res.status(200).json({ msg: 'holiday found', data: companywiseHoliday });
+    } catch (error) {
+        return res.status(500).json({ msg: 'Internal server error', data: error })
+    }
+}
+
+hrmsController.updateHoliday = async (req, res) => {
+    try {
+        const holiday = await Holiday.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (holiday) {
+            return res.status(200).json({ msg: 'Holiday updated successfully', data: holiday })
+        } else {
+            return res.status(400).json({ msg: 'Somwthing Went Wrong' })
+        }
+
+    } catch (error) {
+        return res.status(500).json({ msg: 'Internal server error', data: error })
+    }
+}
+
+hrmsController.deleteHoliday = async (req, res) => {
+    try {
+        const holiday = await Holiday.findByIdAndDelete(req.params.id);
+        res.status(200).json({ msg: "Holiday deleted.", data: holiday });
+    } catch (error) {
+        return res.status(500).json({ msg: 'Internal server error', data: error })
     }
 }
 

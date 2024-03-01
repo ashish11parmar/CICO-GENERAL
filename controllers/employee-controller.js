@@ -115,7 +115,7 @@ userController.adminSignup = async (req, res) => {
     }
 }
 
-userController.sendVerificationCode = async (email, otp) => {
+const sendVerificationCode = async (email, otp) => {
     const emailTemplateSource = fs.readFileSync(path.join(__dirname, "../views/verification.hbs"), "utf8")
     const otpTemplate = handlebars.compile(emailTemplateSource)
     const htmlToSend = otpTemplate({ otp })
@@ -250,8 +250,6 @@ userController.getEmployeesCompanyWise = async (req, res) => {
                     employeeID: employee.employeeID,
                     _id: employee._id
                 }));
-
-
                 // const employeePayload = employees.map(employee => ({
                 //     display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
                 //     firstName: employee.firstName,

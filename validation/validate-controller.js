@@ -17,4 +17,12 @@ const validateCreateEmp = async (req, res, next) => {
     next();
 }
 
-module.exports = { validateAdmin, validateLogin, validateCreateEmp }
+const validateHoliday = async (req, res, next) => {
+    console.log(req.body);
+    if (!req.body.holidayName || !req.body.startDate || !req.body.endDate || !req.body.description) {
+        return res.status(400).json({ message: 'All field are required.' })
+    }
+    next();
+}
+
+module.exports = { validateAdmin, validateLogin, validateCreateEmp, validateHoliday }
