@@ -1,6 +1,6 @@
 const express = require('express');
 const { verifyToken } = require('../services/verifyToken');
-const { validateCreateEmp } = require('../validation/validate-Controller');
+const { validateCreateEmp } = require('../validation/validate-controller');
 const userController = require('../controllers/employee-controller');
 const router = express.Router();
 

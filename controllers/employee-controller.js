@@ -97,6 +97,7 @@ userController.userLogin = async (req, res) => {
 userController.adminSignup = async (req, res) => {
     try {
         const response = await User.findOne({ email: req.body.email })
+        if (response) { return res.status(400).json({ msg: "user already exists.", }) }
         const newPass = CryptoJS.AES.encrypt(req.body.password, 'cico-general');
         req.body.password = newPass;
         const otp = Math.floor(1000 + Math.random() * 9000);
@@ -104,7 +105,6 @@ userController.adminSignup = async (req, res) => {
         req.body.otp = otp;
         req.body.otpExpire = expire;
         sendVerificationCode(req.body.email, otp)
-        if (response) { return res.status(400).json({ msg: "user already exists.", }) }
         const user = new User(req.body);
         await user.save();
         res.status(201).json({ msg: "user registered succesfully" });
@@ -250,19 +250,6 @@ userController.getEmployeesCompanyWise = async (req, res) => {
                     employeeID: employee.employeeID,
                     _id: employee._id
                 }));
-                // const employeePayload = employees.map(employee => ({
-                //     display_name: employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName,
-                //     firstName: employee.firstName,
-                //     lastName: employee.lastName,
-                //     phoneNumber: employee.phoneNumber,
-                //     departments: employee.department.map(dept => dept.title),
-                //     types: employee.type.map(empType => empType.title),
-                //     roles: employee.role.map(empRole => empRole.title),
-                //     email: employee.email,
-                //     employeeID: employee.employeeID,
-                //     _id: employee._id
-                // }));
-
                 res.status(200).json({ msg: "Employees found for the company.", data: employeePayload });
             });
     } catch (error) {

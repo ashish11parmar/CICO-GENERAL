@@ -19,7 +19,11 @@ const settingSchema = new Schema({
         {
             type: Object
         }
-    ]
+    ],
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }
 })
 
 const Setting = mongoose.model('setting', settingSchema);

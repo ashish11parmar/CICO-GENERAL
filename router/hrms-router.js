@@ -1,7 +1,8 @@
 const express = require('express');
 const { verifyToken } = require('../services/verifyToken');
 const hrmsController = require('../controllers/hrms-controller');
-const { validateHoliday } = require('../validation/validate-Controller');
+const { validateHoliday } = require('../validation/validate-controller');
+const settingController = require('../controllers/setting-controller');
 const router = express.Router();
 
 //_____________Employee Designation_________________
@@ -29,5 +30,12 @@ router.post('/holiday', validateHoliday, verifyToken, hrmsController.createHolid
 router.get('/holiday', verifyToken, hrmsController.getAllHoliday)
 router.put('/holiday/:id', validateHoliday, verifyToken, hrmsController.updateHoliday)
 router.delete('/holiday/:id', verifyToken, hrmsController.deleteHoliday)
+
+
+//_____________Company Setting Routes_____________
+router.post('/company', verifyToken, settingController.createSettingCompanyWise)
+router.get('/company', verifyToken, settingController.getCompanySettings)
+router.put('/company/:id', verifyToken, settingController.updateCompanySettings)
+router.delete('/company/:id', verifyToken, settingController.deleteCompanySettings)
 
 module.exports = router
